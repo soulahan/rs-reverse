@@ -13,7 +13,7 @@ function filenameAddDesc(name, desc) {
   return arr.join('.');
 }
 
-function writeFile(ts, immucfg, { jscode, html, appcode = [] }, $_ts, code) {
+function writeFile(ts, immucfg, { jscode, html, appcode = [] }, $_ts, code, outputResolve) {
   const files = [
     {
       name: 'ts.json',
@@ -48,16 +48,16 @@ function writeFile(ts, immucfg, { jscode, html, appcode = [] }, $_ts, code) {
       }
       return ans;
     }, []),
-  ].filter(Boolean).map(it => ({ ...it, filepath: paths.outputResolve('makecode', it.name) }))
-  if (!fs.existsSync(paths.outputResolve('makecode'))) fse.ensureDirSync(paths.outputResolve('makecode'));
+  ].filter(Boolean).map(it => ({ ...it, filepath: outputResolve('makecode', it.name) }))
+  if (!fs.existsSync(outputResolve('makecode'))) fse.ensureDirSync(outputResolve('makecode'));
   files.forEach(({ filepath, text, code }) => filepath && fs.writeFileSync(filepath, text || code));
   return files;
 }
 
-module.exports = function (ts, immucfg, mate = {}) {
+module.exports = function (ts, immucfg, outputResolve, mate = {}) {
   const startTime = new Date().getTime();
-  if (fs.existsSync(paths.outputResolve('makecode'))) {
-    fse.moveSync(paths.outputResolve('makecode'), paths.outputResolve('makecode-old'), { overwrite: true });
+  if (fs.existsSync(outputResolve('makecode'))) {
+    fse.moveSync(outputResolve('makecode'), outputResolve('makecode-old'), { overwrite: true });
   }
   const coder = new Coder(ts, immucfg);
   const { code, $_ts } = coder.run();
@@ -65,7 +65,7 @@ module.exports = function (ts, immucfg, mate = {}) {
   mate.appcode?.forEach((appcode, idx) => {
     appcode.decryptCode = new AppCode(AppCode.getParams(appcode.code), idx + 1).run();
   });
-  const files = writeFile(ts, immucfg, mate, $_ts, code);
+  const files = writeFile(ts, immucfg, mate, $_ts, code, outputResolve);
   logger.info([
     `代码还原成功！用时：${new Date().getTime() - startTime}ms\n`,
     ...files.reduce((ans, it, idx) => ([...ans, typeof it === 'string' ? it : `${it.desc}${paths.relative(it.filepath)}${idx === files.length - 1 || it.newLine ? '\n' : ''}`]), []),

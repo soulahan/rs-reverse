@@ -11,6 +11,7 @@ const appDirectory = (() => {
   return plist.join(path.sep);
 })();
 const resolveApp = (...relativePath) => path.resolve(appDirectory, ...relativePath);
+const resolveCwd = (...relativePath) => path.resolve(process.cwd(), ...relativePath);
 
 module.exports = {
   basePath: resolveApp('.'),
@@ -18,6 +19,7 @@ module.exports = {
   binPath: resolveApp('node_modules', '.bin'),
   package: resolveApp('package.json'),
   resolve: resolveApp,
+  resolveCwd: resolveCwd,
   srcPath: resolveApp('src'),
   outputPath: path.resolve('output'),
   outputResolve: (...p) => path.resolve('output', ...p),
