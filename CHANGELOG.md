@@ -1,5 +1,19 @@
 
 
+## [1.8.0](https://github.com/pysunday/rs-reverse/compare/1.7.0...1.8.0) (2025-09-09)
+
+
+### Features
+
+* 1. makecode子命令增加-j入参，用于还原$_ts.l__处理的js代码 2.生成目标文件调整 3. readme更新 ([5149726](https://github.com/pysunday/rs-reverse/commit/51497269488a32aad65b92c6b17b0a9cb9934d61))
+* 增加-o命令 ([fc1e32f](https://github.com/pysunday/rs-reverse/commit/fc1e32fd0bc8b5a4e35c5d5136f9119bf546e155))
+
+
+### Bug Fixes
+
+* 下标未传入问题修复 ([15e055a](https://github.com/pysunday/rs-reverse/commit/15e055a041a5967252dda2a5257631b2f7aa0925))
+* 拷贝目录报错修复 ([b8702c0](https://github.com/pysunday/rs-reverse/commit/b8702c0eeee0a32c11775af523c5e0ecb42fc5bc))
+
 ## [1.7.1](https://github.com/pysunday/rs-reverse/compare/1.7.0...1.7.1) (2024-04-10)
 
 
