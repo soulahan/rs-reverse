@@ -1,5 +1,12 @@
 
 
+## [1.8.1](https://github.com/pysunday/rs-reverse/compare/1.8.0...1.8.1) (2025-09-09)
+
+
+### Bug Fixes
+
+* 打开上传npm开关 ([bff8981](https://github.com/pysunday/rs-reverse/commit/bff898150bf97b9b81fef6cbd8cfecf7eb162acb))
+
 ## [1.8.0](https://github.com/pysunday/rs-reverse/compare/1.7.0...1.8.0) (2025-09-09)
 
 
