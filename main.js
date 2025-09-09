@@ -55,22 +55,32 @@ const commandBuilder = {
     type: 'string',
     coerce: getCode,
   },
+  o: {
+    alias: 'output',
+    describe: '输出文件目录',
+    type: 'string',
+    default: './output',
+    coerce: (path) => {
+      return paths.resolveCwd(path);
+    }
+  },
   a: {
     alias: 'adapt',
     describe: '已经做了适配的网站名称，不传则为cnipa',
     type: 'string',
-  }
+  },
 }
 
 const commandHandler = (command, argv) => {
   debugLog(argv.level);
+  const outputResolve = (...p) => path.resolve(argv.output, ...p);
   const ts = argv.url?.$_ts || argv.file || require(paths.exampleResolve('codes', `${gv.version}-\$_ts.json`));
   logger.trace(`传入的$_ts.nsd: ${ts.nsd}`);
   logger.trace(`传入的$_ts.cd: ${ts.cd}`);
   gv._setAttr('argv', argv);
   try {
     const immucfg = argv.url ? adapt(argv.url, argv.adapt) : undefined;
-    command(ts, immucfg, _merge(argv.url || {}, argv.jsurls || {}));
+    command(ts, immucfg, outputResolve, _merge(argv.url || {}, argv.jsurls || {}));
   } catch (err) {
     logger.error(err.stack);
   }

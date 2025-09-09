@@ -25,7 +25,7 @@ function filenameAddDesc(name, desc) {
   return arr.join('.');
 }
 
-function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code) {
+function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code, outputResolve) {
   const files = [
     {
       name: 'ts.json',
@@ -55,41 +55,41 @@ function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code
       desc: `${it.name}生成的解密代码：`,
       text: it.decryptCode,
     }))
-  ].filter(Boolean).map(it => ({ ...it, filepath: paths.outputResolve('makecode-high', step, it.name) }))
-  if (!fs.existsSync(paths.outputResolve('makecode-high', step))) fse.ensureDirSync(paths.outputResolve('makecode-high', step));
+  ].filter(Boolean).map(it => ({ ...it, filepath: outputResolve('makecode-high', step, it.name) }))
+  if (!fs.existsSync(outputResolve('makecode-high', step))) fse.ensureDirSync(outputResolve('makecode-high', step));
   return files;
 }
 
-function firstStep(ts, immucfg, mate) {
+function firstStep(ts, immucfg, mate, outputResolve) {
   gv._setAttr('_ts', ts);
   const coder = new Coder(ts, immucfg);
   const { code, $_ts } = coder.run();
-  const files = writeFile('first', ts, immucfg, mate, $_ts, code);
+  const files = writeFile('first', ts, immucfg, mate, $_ts, code, outputResolve);
   const r2mkaText = parseR2mka(coder.r2mkaText);
   const cookieVal = new Cookie($_ts, r2mkaText, coder, code).run();
   const cookieKey = gv.utils.ascii2string(gv.keys[7]).split(';')[5] + 'P';
   return [files, `${cookieKey}=${cookieVal}`];
 }
 
-function secondStep(ts, immucfg, mate) {
+function secondStep(ts, immucfg, mate, outputResolve) {
   gv._setAttr('_ts', ts);
   const coder = new Coder(ts, immucfg);
   const { code, $_ts } = coder.run();
   mate.appcode.forEach((appcode, idx) => {
     appcode.decryptCode = new AppCode(AppCode.getParams(appcode.code), idx + 1).run();
   });
-  return writeFile('second', ts, immucfg, mate, $_ts, code);
+  return writeFile('second', ts, immucfg, mate, $_ts, code, outputResolve);
 }
 
-module.exports = async function (ts, immucfg, mate) {
-  if (fs.existsSync(paths.outputResolve('makecode-high'))) {
-    fse.moveSync(paths.outputResolve('makecode-high'), paths.outputResolve('makecode-high-old'), { overwrite: true });
+module.exports = async function (ts, immucfg, outputResolve, mate) {
+  if (fs.existsSync(outputResolve('makecode-high'))) {
+    fse.moveSync(outputResolve('makecode-high'), outputResolve('makecode-high-old'), { overwrite: true });
   }
   const startTime = new Date().getTime();
-  const [files, cookieStr] = firstStep(ts, immucfg, mate);
+  const [files, cookieStr] = firstStep(ts, immucfg, mate, outputResolve);
   files.unshift('\n第1次请求：\n');
   const result = await getCode(mate.url, cookieStr);
-  files.push('\n第2次请求：\n', ...secondStep(result.$_ts, adapt(result, gv.argv.adapt), result));
+  files.push('\n第2次请求：\n', ...secondStep(result.$_ts, adapt(result, gv.argv.adapt), result, outputResolve));
   files.forEach(({ filepath, text, code }) => filepath && fs.writeFileSync(filepath, text || code));
   logger.info([
     `代码还原成功！用时：${new Date().getTime() - startTime}ms\n`,

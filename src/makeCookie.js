@@ -12,7 +12,7 @@ function parseR2mka(text) {
   return unescape(text.substr(start, end));
 }
 
-function writefile(ts, immucfg) {
+function writefile(ts, immucfg, outputResolve) {
   // 如果是url形式的则保存ts和immucfg
   const now = new Date().getTime();
   const files = [
@@ -26,15 +26,15 @@ function writefile(ts, immucfg) {
       desc: 'url方式提取的静态文本：',
       text: JSON.stringify(immucfg),
     },
-  ].map(it => ({ ...it, filepath: paths.outputResolve(it.name) + '.json' }))
+  ].map(it => ({ ...it, filepath: outputResolve(it.name) + '.json' }))
   if (!fs.existsSync(paths.outputPath)) fs.mkdirSync(paths.outputPath);
   files.forEach(({ filepath, text }) => fs.writeFileSync(filepath, text))
   logger.info('url方式保存文件：\n\n  ' + files.reduce((ans, it, idx) => ([...ans, `${it.desc}${it.filepath}${idx === files.length - 1 ? '\n' : ''}`]), []).join('\n  '));
 }
 
-module.exports = function (ts, immucfg) {
+module.exports = function (ts, immucfg, outputResolve) {
   gv._setAttr('_ts', ts);
-  // if (immucfg) writefile(ts, immucfg);
+  // if (immucfg) writefile(ts, immucfg, outputResolve);
   const startTime = new Date().getTime();
   const coder = new Coder(ts, immucfg);
   const { code, $_ts } = coder.run();
