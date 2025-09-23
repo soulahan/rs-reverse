@@ -47,7 +47,7 @@ async function getCodeByHtml(url, cookieStr) {
     html: {
       code: res.body,
       url,
-      name: nameHandle(url.split('?')[0].split('/').pop(), 'html'),
+      name: nameHandle(url.split('?')[0].split('/').pop() || 'index', 'html'),
       desc: 'url方式提取的html代码：'
     },
     appcode: [],

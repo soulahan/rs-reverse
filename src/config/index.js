@@ -1,6 +1,6 @@
 const logger = require('@utils/logger');
 
-const current_version = 2;
+const current_version = 3;
 
 /*
 keynameNum: 由瑞数动态打包时生成的固定值，控制变量名的生成数量
@@ -26,6 +26,16 @@ module.exports = (version = current_version) => {
     case 2:
       Object.assign(config, {
         keynameNum: 829,
+        offsetConst: {
+          91: 3,
+          92: 51,
+          93: 153,
+        },
+      });
+      break;
+    case 3:
+      Object.assign(config, {
+        keynameNum: 851,
         offsetConst: {
           91: 3,
           92: 51,

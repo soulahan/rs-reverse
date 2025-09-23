@@ -36,9 +36,11 @@ const commandBuilder = {
     describe: '含有nsd, cd值的json文件',
     type: 'string',
     coerce: (input) => {
-      if (['1', '2'].includes(input)) {
+      if (['1', '2', '3'].includes(input)) {
         gv._setAttr('version', Number(input));
         input = paths.exampleResolve('codes', `${input}-\$_ts.json`);
+      } else {
+        input = paths.resolveCwd(input);
       }
       if (!fs.existsSync(input)) throw new Error(`输入文件不存在: ${input}`);
       return JSON.parse(fs.readFileSync(paths.resolve(input), 'utf8'));
@@ -74,7 +76,7 @@ const commandBuilder = {
 const commandHandler = (command, argv) => {
   debugLog(argv.level);
   const outputResolve = (...p) => path.resolve(argv.output, ...p);
-  const ts = argv.url?.$_ts || argv.file || require(paths.exampleResolve('codes', `${gv.version}-\$_ts.json`));
+  const ts = argv.file || argv.url?.$_ts || require(paths.exampleResolve('codes', `${gv.version}-\$_ts.json`));
   logger.trace(`传入的$_ts.nsd: ${ts.nsd}`);
   logger.trace(`传入的$_ts.cd: ${ts.cd}`);
   gv._setAttr('argv', argv);
@@ -137,17 +139,26 @@ module.exports = yargs
         describe: '要运行的代码，如：gv.cp2，即打印cp2的值',
         type: 'string',
         demandOption: true,
+        coerce: (input) => {
+          const inputCwd = paths.resolveCwd(input);
+          if (fs.existsSync(inputCwd) && fs.statSync(inputCwd).isFile()) {
+            return fs.readFileSync(inputCwd, 'utf8')
+          }
+          return input;
+        },
       },
       f: {
         alias: 'file',
         describe: '拥有完整$_ts的json文件',
         type: 'string',
         coerce: (input) => {
-          if (['1', '2'].includes(input)) {
+          if (['1', '2', '3'].includes(input)) {
             gv._setAttr('version', Number(input));
             return paths.exampleResolve('codes', `${input}-\$_ts.json`);
           }
-          return input;
+          const inputCwd = paths.resolveCwd(input);
+          if (!fs.existsSync(inputCwd)) throw new Error(`输入文件不存在: ${inputCwd}`);
+          return inputCwd;
         }
       },
     },

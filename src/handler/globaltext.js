@@ -1,13 +1,16 @@
 module.exports = function(cursor, globalText) {
+  function addCursor(step) {
+    cursor += step;
+  }
   function charCodeByGlobalText(idx) {
     return globalText.charCodeAt(idx);
   }
   function getCurr(step = 0) {
-    cursor += step;
+    addCursor(step);
     return cursor;
   }
   function getCode(step = 0) {
-    cursor += step;
+    addCursor(step);
     return charCodeByGlobalText(cursor++);
   }
   function setCurr(newCursor) {
@@ -17,7 +20,7 @@ module.exports = function(cursor, globalText) {
     globalText = newGlobalText;
   }
   function getList(step = 0) {
-    cursor += step;
+    addCursor(step);
     const len = charCodeByGlobalText(cursor);
     return {
       data: new Array(len).fill(-1).map((_, idx) => charCodeByGlobalText(cursor + idx + 1)),
@@ -27,7 +30,7 @@ module.exports = function(cursor, globalText) {
   }
   function getLine(nextCursor) {
     const data = globalText.substr(cursor, nextCursor);
-    cursor += nextCursor;
+    addCursor(nextCursor);
     return data;
   }
   function init(newCursor, newText) {

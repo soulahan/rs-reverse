@@ -18,7 +18,16 @@ module.exports = class {
     this.opdata = dataOper();
     this.r2mkaText = null;
     this.immucfg = immucfg || gv.config.immucfg;
-    this.functionsPushStart = { 1: 938, 2: 0, 3: 0, 4: 0 }; // 生成方法排序数据的开始下标, 938为键值为348所命中的代码中获得
+    /* **
+     makecookie的第5循环文件可以找到，前后运行代码如下：
+        !_$_6 ? _$aG += -73 : 0;
+        _$jA(794);
+        try {
+          _$_b = _$$z[_$lb[81]];
+          _$hC = _$$z[_$iM[72]];
+        } catch (_$_v) {}
+     * */
+    this.functionsPushStart = { 1: 794, 2: 0, 3: 0, 4: 0 }; // 生成方法排序数据的开始下标, 938为键值为348所命中的代码中获得
     this.functionsNameSort = []; // 存放vm代码中定义的方法，用于计算代码特征码使用
     this.mainFunctionIdx = null; // 主函数（编号为1）在代码中的开始与结束下标
   }
@@ -86,17 +95,20 @@ module.exports = class {
     opmate.setMate();
     this.r2mkaText = optext.getLine(optext.getCode() * 55295 + optext.getCode())
     this.keycodes.push(this.r2mkaText);
-    opmate.setMate('G_$gG', true);
-    for (let i = 0; i < opmate.getMateOri('G_$gG'); i++) {
+    // 代码段数量
+    opmate.setMate('G_code_num', true);
+    for (let i = 0; i < opmate.getMateOri('G_code_num'); i++) {
       this.gren(i, codeArr);
     }
-    codeArr.push('}}}}}}}}}}'.substr(opmate.getMateOri('G_$gG') - 1));
+    codeArr.push('}}}}}}}}}}'.substr(opmate.getMateOri('G_code_num') - 1));
     this.mainFunctionIdx.push(codeArr.join('').length);
     return codeArr;
   }
 
   gren(current, codeArr) {
     const { opmate, opdata, optext, mate, scd, $_ts, keycodes, keynames } = this;
+    const codeFirst = '\n\n\n\n\n';
+    codeArr.push(codeFirst.substring(0, scd() % 5));
     opmate.setMate('_$ku');
     opmate.setMate('_$$6');
     opmate.setMate('_$b$');
@@ -105,11 +117,10 @@ module.exports = class {
     opmate.setMate('_$$g');
     opmate.setMate('_$cu');
     opmate.setMate('_$aw');
-    const codeFirst = '\n\n\n\n\n';
-    codeArr.push(codeFirst.substring(0, scd() % 5));
     opdata.setData('_$_K', optext.getList().data)
     opdata.setData('_$$H', optext.getList().data)
-    const arr2two = optext.getList().data.reduce((ans, item, idx) => {
+    opdata.setData('_$_C', optext.getList().data)
+    const arr2two = opdata.getData('_$_C').reduce((ans, item, idx) => {
       if (idx % 2 === 0) {
         ans.prev = item;
       } else {

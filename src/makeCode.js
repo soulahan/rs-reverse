@@ -61,7 +61,7 @@ module.exports = function (ts, immucfg, outputResolve, mate = {}) {
   }
   const coder = new Coder(ts, immucfg);
   const { code, $_ts } = coder.run();
-  init($_ts);
+  // init($_ts);
   mate.appcode?.forEach((appcode, idx) => {
     appcode.decryptCode = new AppCode(AppCode.getParams(appcode.code), idx + 1).run();
   });
