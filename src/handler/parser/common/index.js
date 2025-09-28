@@ -23,5 +23,6 @@ module.exports = {
   numarrJoin: require('./numarrJoin'),
   numarrAlterByNumber: require('./numarrAlterByNumber'),
   runTask: require('./runTask'),
+  fixedValue20: require('./fixedValue20'),
 }
 

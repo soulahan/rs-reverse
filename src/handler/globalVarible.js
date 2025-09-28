@@ -31,7 +31,12 @@ class GlobalVarible {
     return cache.decryptKeys;
   }
   get basestr() {
+    // 来自cp2
     return 'qrcklmDoExthWJiHAp1sVYKU3RFMQw8IGfPO92bvLNj.7zXBaSnu0TC6gy_4Ze5d{}|~ !#$%()*+,-;=?@[]^';
+  }
+  get alphabet() {
+    // 来自cp2
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
   }
   get utils() {
     return cache.utils;

@@ -37,6 +37,7 @@ const parseBlock = (item, id) => {
         next(value(val, oper, 2, 'window.innerWidth')),
         next(value(val, oper, 2, 'window.outerHeight')),
         next(value(val, oper, 2, 'window.outerWidth')),
+        next(value(val, oper, 8, '0')),
       ];
       break;
     case 1:
@@ -84,6 +85,11 @@ const parseBlock = (item, id) => {
         next(value(val, oper, 1, 'window.navigator.connection')),
       ];
       break;
+    case 8:
+      item.child = [
+        next(block(val, oper, '{k:"1"}')),
+      ]
+      break;
   }
   return item;
 }
@@ -109,7 +115,7 @@ function div(arr, oper, show = '-------') {
 
 function print(divarr, deep = 0, parentIdx = 0) {
   divarr.forEach((it) => {
-    const idx = deep ? `（${it.idx}，${it.idx + parentIdx}）` : `（${it.idx}）`;
+    const idx = deep ? `（${it.idx + 1}，${it.idx + parentIdx + 1}）` : `（${it.idx + 1}）`;
     console.log([new Array(deep * 4).fill(' ').join(''), idx, `[${it.val || '0'}]`, it.show].filter(Boolean).join(' '));
     if (it.child) print(it.child, deep + 1, it.idx);
   })
@@ -131,7 +137,7 @@ function parse(basearr) {
     }
     return val;
   }
-  print(new Array(8).fill('').reduce((ans, it, idx) => {
+  print(new Array(9).fill('').reduce((ans, it, idx) => {
     return [
       ...ans,
       next(div(basearr, oper)),

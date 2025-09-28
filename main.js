@@ -75,6 +75,7 @@ const commandBuilder = {
 
 const commandHandler = (command, argv) => {
   debugLog(argv.level);
+  debugger;
   const outputResolve = (...p) => path.resolve(argv.output, ...p);
   const ts = argv.file || argv.url?.$_ts || require(paths.exampleResolve('codes', `${gv.version}-\$_ts.json`));
   logger.trace(`传入的$_ts.nsd: ${ts.nsd}`);
@@ -168,8 +169,13 @@ module.exports = yargs
       const gv = require('@utils/initGv')(argv.file);
       Object.assign(global, gv.utils);
       Object.assign(global, require('@src/handler/viewer/'));
-      const output = JSON.stringify(eval(argv.code));
-      console.log([`\n  输入：${argv.code}`, `输出：${output}\n`].join('\n  '));
+      let output = '';
+      if (argv.code) {
+        output = JSON.stringify(eval(argv.code));
+        console.log([`\n  输入：${argv.code}`, `输出：${output}\n`].join('\n  '));
+      } else {
+        eval(fs.readFileSync(paths.resolve('utils/consoles/keys.js'), 'utf8'));
+      }
     }
   })
   .command({

@@ -67,7 +67,7 @@ function firstStep(ts, immucfg, mate, outputResolve) {
   const files = writeFile('first', ts, immucfg, mate, $_ts, code, outputResolve);
   const r2mkaText = parseR2mka(coder.r2mkaText);
   const cookieVal = new Cookie($_ts, r2mkaText, coder, code).run();
-  const cookieKey = gv.utils.ascii2string(gv.keys[7]).split(';')[5] + 'P';
+  const cookieKey = gv.utils.ascii2string(gv.keys[7]).split(';')[5] + 'T';
   return [files, `${cookieKey}=${cookieVal}`];
 }
 

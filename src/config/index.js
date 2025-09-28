@@ -37,9 +37,9 @@ module.exports = (version = current_version) => {
       Object.assign(config, {
         keynameNum: 851,
         offsetConst: {
-          91: 3,
-          92: 51,
-          93: 153,
+          92: 3,
+          93: 51,
+          94: 153,
         },
       });
       break;

@@ -4,6 +4,7 @@ const parser = require('./parser/');
 const gv = require('./globalVarible');
 
 const {
+  fixedValue20,
   factorial,
   fibonacci,
   numToNumarr2,
@@ -28,8 +29,23 @@ const {
   runTask,
 } = parser;
 
-const developConfig = {
+const developConfigDev = {
   // 开发时用的配置，比如时间值固定、随机数固定等
+  'window.navigator.userAgent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+  'window.name': '',
+  'window.innerHeight': 958,
+  'window.innerWidth': 150,
+  'window.outerHeight': 1079,
+  'window.outerWidth': 1728,
+  execNumberByTime: 2191,
+  currentTime: 1757080132465,
+  startTime: 1757080133,
+  runTime: 1757080133,
+  // random: 0.523,
+  // codeUid: 51073,
+}
+const developConfig = {
+  random: 0.423,
 }
 
 module.exports = class {
@@ -41,7 +57,7 @@ module.exports = class {
     this.config = {
       'window.navigator.maxTouchPoints': 0,
       'window.eval.toString().length': 33,
-      'window.navigator.userAgent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+      'window.navigator.userAgent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
       'window.navigator.platform': 'MacIntel',
       'window.name': '$_YWTU=LjFNq_oZCsth6KJ9xHOin6RRhL4fQt7Vsn8YCz9dRjl&$_YVTX=Wa&vdFm=_$hh',
       'window.navigator.battery': {
@@ -61,7 +77,7 @@ module.exports = class {
       'window.outerHeight': 1025,
       'window.outerWidth': 1680,
       'window.document.hidden': false,
-      formatUid: 46228, // 代码特征码
+      codeUid: null, // 代码特征值
       currentTime: current, // 完整的时间戳
       runTime: Math.floor(current / 1000), // 运行时间
       startTime: Math.floor(current / 1000) - 1, // 模拟浏览器启动时间
@@ -71,7 +87,6 @@ module.exports = class {
       execNumberByTime: _random(1500, 2000), // 固定时间内的循环运行次数
       ...developConfig,
     }
-    // console.log(this.config);
   }
 
   run() {
@@ -103,6 +118,99 @@ module.exports = class {
         this.config.random
       )
     );
+  }
+
+  getBasearr_v3() {
+    // 第3版计算cookie基础数组，cookie位数257位(当gv.keys[22]存在值)
+    return numarrJoin(
+      3,
+      numarrJoin(
+        1,
+        this.config['window.navigator.maxTouchPoints'],
+        this.config['window.eval.toString().length'],
+        128,
+        ...numToNumarr4(uuid(this.config['window.navigator.userAgent'])),
+        string2ascii(this.config['window.navigator.platform']),
+        ...numToNumarr4(this.config.execNumberByTime),
+        ...execRandomByNumber(98, this.config.random),
+        0,
+        0,
+        ...numToNumarr4(Number(hexnum('3136373737323136'))),
+        ...numToNumarr4(this.getTaskNumber('0>one>60-197', 56)),
+        ...numToNumarr2(this.config['window.innerHeight']),
+        ...numToNumarr2(this.config['window.innerWidth']),
+        ...numToNumarr2(this.config['window.outerHeight']),
+        ...numToNumarr2(this.config['window.outerWidth']),
+        ...numToNumarr8(this.getTaskNumber('0>one>60-197', 61)),
+      ),
+      10, // 下标43
+      (() => {
+        const flag = +ascii2string(gv.keys[24]);
+        return [
+          flag > 0 && flag < 8 ? 1 : 0,
+          13,
+          ...numToNumarr4(this.config.r2mkaTime + this.config.runTime - this.config.startTime), // ramka串返回的时间 + 当前时间 - 启动时间
+          ...numToNumarr4(+ascii2string(gv.keys[19])),
+          ...numToNumarr8(Math.floor((this.config.random || Math.random()) * 1048575) * 4294967296 + (((this.config.currentTime + 0) & 4294967295) >>> 0)),
+          flag,
+        ];
+      })(),
+      7, // 下标64
+      [
+        ...numToNumarr4(16777216), // gv.cp2取得
+        ...numToNumarr4(0), // 任务编号0-0的任务列表取得
+        ...numToNumarr2(4117),
+        ...this.getCodeUid(),
+      ],
+      0, // 任务编号0>one>63-287的任务列表取得
+      [0], // 任务编号0>one>63>one>4-290的任务列表取得
+      6, // 下标81
+      [ // 编号510方法执行返回
+        1,
+        ...numToNumarr2(1), // 判断某程序代码是否执行，执行后会取当前时间缓存备用，通过缓存值变量名和undefined做对比，如果存在则执行Math.round((缓存时间 - 当前时间) / 100)，执行出来的结果是Math.round(1.26)
+        ...numToNumarr2(1), // math.round((0 + (!document.hidden ? 某个时间 - 当前时间)) / 100), 某个时间与上一行缓存的时间值一致，不确定是否同一个值
+        this.config['window.document.hidden'] ? 0 : 1,
+        ...encryptMode2(decrypt(ascii2string(gv.keys[22])), numarrAddTime(gv.keys[16])[0]),
+        ...numToNumarr2(+decode(decrypt(ascii2string(gv.keys[22])))),
+      ],
+      2, // 下标99
+      fixedValue20(),
+      9, // 下标105
+      (() => { // 编号133方法
+        const { connType } = this.config['window.navigator.connection'];
+        const { charging, chargingTime, level } = this.config['window.navigator.battery']
+        const connTypeIdx = ['bluetooth', 'cellular', 'ethernet', 'wifi', 'wimax'].indexOf(connType) + 1;
+        let oper = 0;
+        if (level) oper |= 2;
+        if (charging) oper |= 1;
+        if (connTypeIdx !== undefined) oper |= 8
+        return [
+          oper,
+          level * 100,
+          ...numToNumarr2(chargingTime),
+          connTypeIdx,
+        ]
+      })(),
+      13,
+      [0],
+      15,
+      (() => {
+        const [key, valstr] = ascii2string(gv.keys[40]).split(':');
+        const val = ((str) => {
+          if (typeof str !== 'string') throw new Error('传入参数非字符串');
+          str = str.replace(/[^A-Za-z0-9\+\/\=]/g, '')
+          if (str.length !== 4) throw new Error('字符长度非4个未做适配');
+          const data = [...str].map(it => gv.alphabet.indexOf(it));
+          const val1 = (data[0] << gv.cp2[54]) | (data[1] >> gv.cp2[13]);
+          const val2 = ((gv.cp2[15] & data[1]) << gv.cp2[13]) | (data[2] >> gv.cp2[54]);
+          const val3 = ((gv.cp2[42] & data[2]) << gv.cp2[45]) | data[3];
+          if (val2 === 4) return val3;
+          throw new Error(`解析${str}j结果中中间值不为二会在数据组装时传回{k:"[E]"}, 当前案例{k:1}为正确值`)
+        })(valstr);
+        const arr = string2ascii(`{"${key}":${val}}`);
+        return [ arr.length , ...arr ];
+      })(),
+    )
   }
 
   getBasearr_v2() {
@@ -272,6 +380,7 @@ module.exports = class {
   }
 
   getCodeUid() {
+    if (this.config.codeUid) return numToNumarr2(this.config.codeUid);
     const mainFunctionCode = this.vmcode.slice(...this.coder.mainFunctionIdx);
     const one = uuid(this.coder.functionsNameSort[ascii2string(gv.keys[33])].code);
     const len = parseInt(mainFunctionCode.length / 100);

@@ -12,3 +12,10 @@ module.exports = function (num) {
     num & 255
   ]
 }
+
+module.exports.reverse = function (numarr) {
+  if (!Array.isArray(numarr) || numarr.length !== 2) {
+    throw new Error('numToNumarr2.reverse调用错误，请检查入参');
+  }
+  return (numarr[0] << 8) | numarr[1];
+}
