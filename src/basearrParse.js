@@ -115,7 +115,7 @@ function div(arr, oper, show = '-------') {
 
 function print(divarr, deep = 0, parentIdx = 0) {
   divarr.forEach((it) => {
-    const idx = deep ? `（${it.idx + 1}，${it.idx + parentIdx + 1}）` : `（${it.idx + 1}）`;
+    const idx = deep ? `（${it.idx}，${it.idx + parentIdx}）` : `（${it.idx}）`;
     console.log([new Array(deep * 4).fill(' ').join(''), idx, `[${it.val || '0'}]`, it.show].filter(Boolean).join(' '));
     if (it.child) print(it.child, deep + 1, it.idx);
   })

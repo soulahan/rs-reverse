@@ -3,3 +3,4 @@ exports.isValidUrl = require('./isValidUrl');
 exports.paths = require('./paths');
 exports.getCode = require('./getCode');
 exports.findFullString = require('./findFullString');
+exports.getImmucfg = require('./getImmucfg');

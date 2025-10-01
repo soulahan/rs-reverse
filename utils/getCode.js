@@ -8,7 +8,7 @@ const urlresolve = require('url').resolve;
 
 function addRequestHead(uri) {
   return {
-    proxy: 'http://127.0.0.1:8888',
+    // proxy: 'http://127.0.0.1:8888',
     gzip: true,
     uri,
     resolveWithFullResponse: true,
@@ -18,7 +18,6 @@ function addRequestHead(uri) {
       'Upgrade-Insecure-Requests': '1',
       'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-      'Referer': 'http://epub.cnipa.gov.cn/',
       'Accept-Encoding': 'gzip, deflate',
       'Accept-Language': 'zh-CN,zh;q=0.9',
     }
@@ -42,7 +41,7 @@ async function getCodeByHtml(url, cookieStr) {
   if (!tsscript.length) throw new Error(`${res.body}\n错误：链接返回结果未找到cd或nsd, 请检查!`);
   const $_ts = Function('window', tsscript[0] + 'return $_ts')({});
   $_ts.metaContent = _get($('meta[r=m]'), '0.attribs.content');
-  const checkSrc = (src) => src?.split('.').pop().split('?')[0] === 'js' ? src : undefined;
+  const checkSrc = (src) => (!src || (src[0] !== '/' && src.indexOf(url) === -1) || src.split('.').pop().split('?')[0] !== 'js') ? undefined : src;
   const remotes = scripts.map(it => checkSrc(it.attribs.src)).filter(Boolean);
   if (!remotes.length) throw new Error('未找到js外链，无法提取配置文本请检查!');
   const ret = {
@@ -58,6 +57,7 @@ async function getCodeByHtml(url, cookieStr) {
     appcode: [],
     url,
   }
+  debugger;
   await getCodeByJs(remotes.map(it => urlresolve(url, it)), ret);
   logger.info(`网络请求用时：${Date.now() - start} ms`);
   if (ret.jscode) return ret;

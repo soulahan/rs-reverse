@@ -187,7 +187,7 @@ module.exports = class {
   }
 
   functionsSort(current, functionsNameMap) {
-    const start = this.functionsPushStart[current];
+    const start = gv.config.functionsPushStart[current];
     const { opdata, opmate } = this
     this.$_ts.aebi[current].slice(start, start + opdata.getData('_$$w').length).forEach(idx => {
       const numarr = opdata.getData('_$$k')[idx];

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const JSON5 = require('json5');
 const path = require('path');
 const paths = require('./utils/paths');
 require('module-alias')(path.dirname(paths.package));
@@ -9,13 +10,14 @@ const makeCodeHigh = require('@src/makeCodeHigh');
 const makeCookie = require('@src/makeCookie');
 const basearrParse = require('@src/basearrParse');
 const utils = require('@utils/');
-const { logger, getCode } = utils;
+const { logger, getCode, getImmucfg } = utils;
 const pkg = require(paths.package);
 const log4js = require('log4js');
-const adapt = require('@src/adapt');
 const gv = require('@src/handler/globalVarible');
 const _merge = require('lodash/merge');
 const _omit = require('lodash/omit');
+const _pick = require('lodash/pick');
+const { mode_version } = require('@src/config/');
 
 function debugLog(level) {
   if (level) {
@@ -33,27 +35,28 @@ function debugLog(level) {
 const commandBuilder = {
   f: {
     alias: 'file',
-    describe: '含有nsd, cd值的json文件',
+    describe: '含有nsd, cd值的json文件, 不传则取与模式版本(-m)匹配的默认ts文件',
     type: 'string',
     coerce: (input) => {
-      if (['1', '2', '3'].includes(input)) {
-        gv._setAttr('version', Number(input));
-        input = paths.exampleResolve('codes', `${input}-\$_ts.json`);
-      } else {
-        input = paths.resolveCwd(input);
-      }
+      input = paths.resolveCwd(input);
       if (!fs.existsSync(input)) throw new Error(`输入文件不存在: ${input}`);
-      return JSON.parse(fs.readFileSync(paths.resolve(input), 'utf8'));
+      return input;
     }
   },
-  l: {
-    alias: 'level',
-    describe: '日志打印等级，参考log4js，默认为info',
-    type: 'string',
+  m: {
+    alias: 'mode',
+    describe: `与-f参数一起使用，表示使用的模式版本，当前最新模式版本为${mode_version}`,
+    default: mode_version,
+    type: 'number',
+    coerce: (input) => {
+      if (isNaN(input) || input < 1 || input > mode_version) throw new Error(`模式版本不合法！取值应该在1~${mode_version}之间`);
+      gv._setAttr('version', input);
+      return input;
+    },
   },
   u: {
     alias: 'url',
-    describe: '瑞数返回204状态码的请求地址',
+    describe: '瑞数返回204状态码的请求地址, 与-a命令一起使用',
     type: 'string',
     coerce: getCode,
   },
@@ -66,23 +69,27 @@ const commandBuilder = {
       return paths.resolveCwd(path);
     }
   },
-  a: {
-    alias: 'adapt',
-    describe: '已经做了适配的网站名称，不传则为cnipa',
+  l: {
+    alias: 'level',
+    describe: '日志打印等级，参考log4js，默认为info',
     type: 'string',
   },
 }
 
 const commandHandler = (command, argv) => {
-  debugLog(argv.level);
-  debugger;
-  const outputResolve = (...p) => path.resolve(argv.output, ...p);
-  const ts = argv.file || argv.url?.$_ts || require(paths.exampleResolve('codes', `${gv.version}-\$_ts.json`));
-  logger.trace(`传入的$_ts.nsd: ${ts.nsd}`);
-  logger.trace(`传入的$_ts.cd: ${ts.cd}`);
   gv._setAttr('argv', argv);
+  debugLog(argv.level);
+  const outputResolve = (...p) => path.resolve(argv.output, ...p);
+  const ts = (() => {
+    if (argv.file) return JSON.parse(fs.readFileSync(argv.file, 'utf8'));
+    if (argv.url) return argv.url.$_ts;
+    const tspath = paths.exampleResolve('codes', `${argv.mode}-\$_ts.json`)
+    return JSON.parse(fs.readFileSync(tspath, 'utf8'))
+  })();
+  logger.trace(`$_ts.nsd: ${ts.nsd}`);
+  logger.trace(`$_ts.cd: ${ts.cd}`);
   try {
-    const immucfg = argv.url ? adapt(argv.url, argv.adapt) : undefined;
+    const immucfg = argv.url ? getImmucfg(argv.url.jscode.code) : gv.config.immucfg;
     command(ts, immucfg, outputResolve, _merge(argv.url || {}, argv.jsurls || {}));
   } catch (err) {
     logger.error(err.stack);
@@ -122,13 +129,29 @@ module.exports = yargs
   })
   .command({
     command: 'makecookie',
-    describe: '生成动态cookie',
-    builder: commandBuilder,
+    describe: '生成cookie字符串，可直接复制使用',
+    builder: {
+      ...commandBuilder,
+      c: {
+        alias: 'config',
+        describe: '配置对象，传入对象或者json文件路径',
+        type: 'string',
+        coerce: (input) => {
+          const inputCwd = paths.resolveCwd(input);
+          if (fs.existsSync(inputCwd) && fs.statSync(inputCwd).isFile()) {
+            input = fs.readFileSync(inputCwd, 'utf8')
+          }
+          const data = JSON5.parse(input);
+          gv._setAttr('makecookieRuntimeConfig', data)
+          return data;
+        },
+      },
+    },
     handler: commandHandler.bind(null, makeCookie),
   })
   .command({
     command: 'exec',
-    describe: '直接运行代码，用于开发及演示时使用，Math.random方法固定返回值为0.1253744220839037',
+    describe: '直接运行代码，用于开发及演示时使用',
     builder: {
       l: {
         alias: 'level',
@@ -148,25 +171,12 @@ module.exports = yargs
           return input;
         },
       },
-      f: {
-        alias: 'file',
-        describe: '拥有完整$_ts的json文件',
-        type: 'string',
-        coerce: (input) => {
-          if (['1', '2', '3'].includes(input)) {
-            gv._setAttr('version', Number(input));
-            return paths.exampleResolve('codes', `${input}-\$_ts.json`);
-          }
-          const inputCwd = paths.resolveCwd(input);
-          if (!fs.existsSync(inputCwd)) throw new Error(`输入文件不存在: ${inputCwd}`);
-          return inputCwd;
-        }
-      },
+      ..._pick(commandBuilder, ['f', 'm']),
     },
     handler: (argv) => {
       debugLog(argv.level);
       Math.random = () => 0.1253744220839037;
-      const gv = require('@utils/initGv')(argv.file);
+      const gv = require('@utils/initGv')(argv);
       Object.assign(global, gv.utils);
       Object.assign(global, require('@src/handler/viewer/'));
       let output = '';
@@ -203,10 +213,12 @@ module.exports = yargs
     'Show version number': '显示版本号',
     'Show help': '显示帮助信息',
   })
-  .example('$0 makecode -f example/codes/1-\$_ts.json')
   .example('$0 makecode -u http://url/path')
-  .example('$0 makecookie -f example/codes/1-\$_ts.json')
+  .example('$0 makecookie -f /path/to/ts.json -m 3')
   .example('$0 makecookie -u http://url/path')
+  .example('$0 makecode-high -u http://url/path')
+  .example("$0 exec -m 3 -c 'ascii2string(gv.keys[21])'")
+  .example("$0 basearr -b '[3,49,...,103,...,125]' -b '[3,49,...,87,...,125]'")
   .epilog('')
   .argv;
 

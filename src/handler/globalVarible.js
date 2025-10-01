@@ -3,6 +3,7 @@ const _chunk = require('lodash/chunk');
 const _get = require('lodash/get');
 const _set = require('lodash/set');
 const config = require('@src/config/');
+const makecookieRuntimeConfig = require('@src/config/makecookieRuntimeConfig');
 
 const cache = {};
 
@@ -14,9 +15,13 @@ class GlobalVarible {
     }
     return cache.config
   }
+  get makecookieRuntimeConfig() {
+    // 生成cookie需要的配置项
+    return { ...makecookieRuntimeConfig, ...(cache.makecookieRuntimeConfig || {}) };
+  }
   get version() {
     // 代码版本
-    return cache.version || this.config.version;
+    return cache.version;
   }
   get metaContent() {
     return cache.metaContent;

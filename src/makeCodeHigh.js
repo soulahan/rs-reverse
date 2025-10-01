@@ -9,8 +9,8 @@ const Cookie = require('./handler/Cookie');
 const unescape = require('@utils/unescape');
 const gv = require('@src/handler/globalVarible');
 const getCode = require('@utils/getCode');
-const adapt = require('@src/adapt');
 const { getLength } = require('@src/handler/parser/common');
+const getImmucfg = require('@utils/getImmucfg');
 
 function parseR2mka(text) {
   const start = text.indexOf('"') + 1;
@@ -89,7 +89,7 @@ module.exports = async function (ts, immucfg, outputResolve, mate) {
   const [files, cookieStr] = firstStep(ts, immucfg, mate, outputResolve);
   files.unshift('\n第1次请求：\n');
   const result = await getCode(mate.url, cookieStr);
-  files.push('\n第2次请求：\n', ...secondStep(result.$_ts, adapt(result, gv.argv.adapt), result, outputResolve));
+  files.push('\n第2次请求：\n', ...secondStep(result.$_ts, getImmucfg(result.jscode.code), result, outputResolve));
   files.forEach(({ filepath, text, code }) => filepath && fs.writeFileSync(filepath, text || code));
   logger.info([
     `代码还原成功！用时：${new Date().getTime() - startTime}ms\n`,
