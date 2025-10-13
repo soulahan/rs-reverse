@@ -1,3 +1,4 @@
+const logger = require('@utils/logger');
 const _random = require('lodash/random');
 const dataOper = require('./dataOper');
 const parser = require('./parser/');
@@ -49,6 +50,7 @@ module.exports = class {
 
   run() {
     const basearr = this.getBasearr()
+    logger.info(`basearr: [${basearr}]`)
     const nextarr = numarrJoin(
       numarrJoin(
         2,

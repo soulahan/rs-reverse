@@ -18,16 +18,6 @@ module.exports = class {
     this.opdata = dataOper();
     this.r2mkaText = null;
     this.immucfg = immucfg || gv.config.immucfg;
-    /* **
-     makecookie的第5循环文件可以找到，前后运行代码如下：
-        !_$_6 ? _$aG += -73 : 0;
-        _$jA(794);
-        try {
-          _$_b = _$$z[_$lb[81]];
-          _$hC = _$$z[_$iM[72]];
-        } catch (_$_v) {}
-     * */
-    this.functionsPushStart = { 1: 794, 2: 0, 3: 0, 4: 0 }; // 生成方法排序数据的开始下标, 938为键值为348所命中的代码中获得
     this.functionsNameSort = []; // 存放vm代码中定义的方法，用于计算代码特征码使用
     this.mainFunctionIdx = null; // 主函数（编号为1）在代码中的开始与结束下标
   }
@@ -178,8 +168,10 @@ module.exports = class {
     codeArr.push(opmate.getMate('_$$6'), ",", opmate.getMate('_$aw'), "=", opmate.getMate('G_$kv'), "[", current, "];");
     codeArr.push("while(1){", opmate.getMate('_$cu'), "=", opmate.getMate('_$aw'), "[", opmate.getMate('_$ku'), "++];");
     codeArr.push("if(", opmate.getMate('_$cu'), "<", opmate.getMateOri('_$bf'), "){");
-    if ([1, 2, 3, 4].includes(current)) {
-      this.functionsSort(current, functionsNameMap);
+    if (gv.argv._[0] !== 'makecode') {
+      if ([1, 2, 3, 4].includes(current)) {
+        this.functionsSort(current, functionsNameMap);
+      }
     }
     const codelist = this.grenIfelse(0, opmate.getMateOri('_$bf'), []);
     codeArr.push(...codelist);
@@ -187,12 +179,31 @@ module.exports = class {
   }
 
   functionsSort(current, functionsNameMap) {
-    const start = gv.config.functionsPushStart[current];
-    const { opdata, opmate } = this
-    this.$_ts.aebi[current].slice(start, start + opdata.getData('_$$w').length).forEach(idx => {
+    const { opdata, opmate, keycodes, keynames } = this
+    const len = opdata.getData('_$$w').length;
+    const aebi = this.$_ts.aebi[current];
+    const getName = (idx) => {
       const numarr = opdata.getData('_$$k')[idx];
-      if (!numarr || numarr.length !== 5) throw new Error('');
-      const name = this.keynames[numarr[3]];
+      if (!numarr || numarr.length !== 5 || !functionsNameMap[keynames[numarr[3]]]) throw new Error('排序函数生成失败，请检查！');
+      return keynames[numarr[3]];
+    }
+    let start = 0;
+    if (current === 1) {
+      keycodes
+        .filter(it => it.match(/^\([0-9]+\);$/))
+        .forEach(it => {
+          const s = parseInt(it.slice(1));
+          if (s + len > aebi.length) return;
+          try {
+            aebi.slice(s, s + len).forEach(getName);
+          } catch(err) {
+            return;
+          }
+          start = s;
+        });
+    }
+    aebi.slice(start, start + len).forEach(idx => {
+      const name = getName(idx)
       this.functionsNameSort.push({
         name,
         current,

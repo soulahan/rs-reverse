@@ -13,7 +13,7 @@ module.exports = function(str) {
       curr += firstCode;
       if(curr >= 127) curr -= 30;
     }
-    ans[idx - 1] = curr;
+    ans[idx - 1] = String.fromCharCode(curr);
   }
-  return String.fromCharCode(...ans).split(splitStr);
+  return ans.join('').split(splitStr);
 }

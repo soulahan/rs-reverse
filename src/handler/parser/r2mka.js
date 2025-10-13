@@ -2,18 +2,24 @@ const gv = require('../globalVarible');
 const logger = require('@utils/logger');
 
 function gtHandler(str, curr) {
+  function oper(step = 1) {
+    // console.log(`[r2mka] current: ${curr}(${str.charCodeAt(curr)}) step: ${step}(${str.charCodeAt(curr + step)})`);
+    curr += step;
+  }
   return {
     getCurr: function() {
       return curr;
     },
     getCode: function() { 
-      return str.charCodeAt(curr++);
+      const code = str.charCodeAt(curr);
+      oper()
+      return code;
     },
     getLine: function() {
       const end = this.getCode();
       if (end === 0) return '';
       const ans = str.substr(curr, end);
-      curr += end;
+      oper(end);
       return ans;
     },
     getList: function() {

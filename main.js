@@ -50,7 +50,6 @@ const commandBuilder = {
     type: 'number',
     coerce: (input) => {
       if (isNaN(input) || input < 1 || input > mode_version) throw new Error(`模式版本不合法！取值应该在1~${mode_version}之间`);
-      gv._setAttr('version', input);
       return input;
     },
   },
@@ -78,6 +77,7 @@ const commandBuilder = {
 
 const commandHandler = (command, argv) => {
   gv._setAttr('argv', argv);
+  gv._setAttr('version', argv.mode);
   debugLog(argv.level);
   const outputResolve = (...p) => path.resolve(argv.output, ...p);
   const ts = (() => {

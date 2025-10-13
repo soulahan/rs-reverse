@@ -57,10 +57,17 @@ async function getCodeByHtml(url, cookieStr) {
     appcode: [],
     url,
   }
-  debugger;
   await getCodeByJs(remotes.map(it => urlresolve(url, it)), ret);
   logger.info(`网络请求用时：${Date.now() - start} ms`);
-  if (ret.jscode) return ret;
+  if (ret.jscode) {
+    const val = ret.jscode.code.match(/_\$[\$_A-Za-z0-9]{2}=_\$[\$_A-Za-z0-9]{2}\(0,([0-9]+),_\$[\$_A-Za-z0-9]{2}\(_\$[\$_A-Za-z0-9]{2}\)\)/);
+    if (val && val.length === 2) {
+      ret.keynameNum = parseInt(val[1]);
+    } else {
+      throw new Error('keyname长度未匹配到!');
+    }
+    return ret;
+  }
   throw new Error('js外链中没有瑞数的代码文件');
 }
 

@@ -11,7 +11,7 @@ class GlobalVarible {
   get config() {
     // 不同版本的可变配置
     if (!cache.config) {
-      cache.config = config(cache.version);
+      cache.config = config(cache.version, cache.argv);
     }
     return cache.config
   }
@@ -21,7 +21,7 @@ class GlobalVarible {
   }
   get version() {
     // 代码版本
-    return cache.version;
+    return cache.version || cache.argv.mode;
   }
   get metaContent() {
     return cache.metaContent;

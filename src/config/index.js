@@ -10,7 +10,7 @@ codemap(工具动态生成): 瑞数主体循环方法生成的配置文件，用
 immucfg(-u命令动态生成): 版本固定值
 */
 
-module.exports = (version = mode_version) => {
+module.exports = (version = mode_version, argv) => {
   logger.trace(`当前配置版本: ${version}`);
   const config = {};
   switch (version) {
@@ -22,7 +22,6 @@ module.exports = (version = mode_version) => {
           82: 51,
           83: 153,
         },
-        functionsPushStart: { 1: 938, 2: 0, 3: 0, 4: 0 },
       });
       break;
     case 2:
@@ -33,7 +32,6 @@ module.exports = (version = mode_version) => {
           92: 51,
           93: 153,
         },
-        functionsPushStart: { 1: 938, 2: 0, 3: 0, 4: 0 },
       });
       break;
     case mode_version:
@@ -44,20 +42,13 @@ module.exports = (version = mode_version) => {
           93: 51,
           94: 153,
         },
-        /* ** 生成方法排序数据的开始下标
-          makecookie的第5循环文件可以找到，前后运行代码如下：
-            !_$_6 ? _$aG += -73 : 0;
-            _$jA(794);
-            try {
-              _$_b = _$$z[_$lb[81]];
-              _$hC = _$$z[_$iM[72]];
-            } catch (_$_v) {}
-          * */
-        functionsPushStart: { 1: 794, 2: 0, 3: 0, 4: 0 },
       });
       break;
     default:
       throw new Error(`当前配置版本不存在, 版本编号：${version}`);
+  }
+  if (argv?.url?.keynameNum) {
+    config.keynameNum = argv.url.keynameNum;
   }
   return {
     ...config,

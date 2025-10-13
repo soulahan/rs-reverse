@@ -6,6 +6,7 @@ const gv = require('@src/handler/globalVarible');
 const Coder = require('@src/handler/Coder');
 
 module.exports = function(argv) {
+  gv._setAttr('version', argv.mode);
   gv._setAttr('argv', argv);
   const filepath = argv.file ? argv.file : paths.exampleResolve('codes', `${argv.mode}-\$_ts.json`);
   logger.debug(`初始化GlobalVarible变量，$_ts配置文件：${filepath}`);
