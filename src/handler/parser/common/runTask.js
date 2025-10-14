@@ -36,7 +36,12 @@ module.exports = function(task, args, allowTask) {
           }
         }
         if (gv.config.offsetConst[key]) return gv.config.offsetConst[key];
-        error('loop_res取值未找到', { key });
+        if (task.key === '0>one>22-24') {
+          const idx = parseInt(key);
+          Object.assign(gv.config.offsetConst, { [idx]: 3, [idx + 1]: 51, [idx + 2]: 153 });
+          return gv.config.offsetConst[key];
+        }
+        error(`loop_res取值未找到: ${key}`, { key });
       }
     })
     return dynamicExec(task, 0, args, loop_res, global_res);

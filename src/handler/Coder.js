@@ -5,6 +5,7 @@ const arraySwap = require('./arraySwap');
 const initTs = require('./initTs');
 const findFullString = require('@/utils/findFullString');
 const gv = require('@src/handler/globalVarible');
+const getCodemap = require('@utils/getCodemap');
 
 module.exports = class {
   constructor(ts, immucfg) {
@@ -34,10 +35,16 @@ module.exports = class {
     }
     this.parseTs(codeStr);
     this.endTime = new Date().getTime();
-    return {
+    const result = {
       code: codeStr,
       $_ts: this.$_ts,
     }
+    if (gv.argv._[0] !== 'makecode') {
+      const codemap = getCodemap(codeStr);
+      result.codemap = codemap;
+      gv.config.codemap = codemap;
+    }
+    return result;
   }
 
   parseTs(codeStr) {

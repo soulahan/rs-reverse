@@ -12,7 +12,7 @@ immucfg(-u命令动态生成): 版本固定值
 
 module.exports = (version = mode_version, argv) => {
   logger.trace(`当前配置版本: ${version}`);
-  const config = {};
+  const config = {offsetConst: {}};
   switch (version) {
     case 1:
       Object.assign(config, {
@@ -37,11 +37,6 @@ module.exports = (version = mode_version, argv) => {
     case mode_version:
       Object.assign(config, {
         keynameNum: 851,
-        offsetConst: {
-          92: 3,
-          93: 51,
-          94: 153,
-        },
       });
       break;
     default:

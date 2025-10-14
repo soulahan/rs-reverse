@@ -89,6 +89,7 @@ module.exports = async function (ts, immucfg, outputResolve, mate) {
   const [files, cookieStr] = firstStep(ts, immucfg, mate, outputResolve);
   files.unshift('\n第1次请求：\n');
   const result = await getCode(mate.url, cookieStr);
+  if (result.statusCode !== 200) throw new Error(`第二次请求返回状态码非200（${result.statusCode}）`);
   files.push('\n第2次请求：\n', ...secondStep(result.$_ts, getImmucfg(result.jscode.code), result, outputResolve));
   files.forEach(({ filepath, text, code }) => filepath && fs.writeFileSync(filepath, text || code));
   logger.info([

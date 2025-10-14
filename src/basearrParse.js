@@ -121,7 +121,7 @@ function print(divarr, deep = 0, parentIdx = 0) {
   })
 }
 
-function parse(basearr) {
+function parse_133(basearr) {
   let oper = 0;
   console.log('\n');
   const next = (val) => {
@@ -145,6 +145,27 @@ function parse(basearr) {
       next(block(basearr, oper, idx)),
     ];
   }, []));
+}
+
+function parseOther(basearr) {
+  let oper = 0, len, div;
+  [3, 10, 7, 0, 6, 2, 9, 13].forEach(it => {
+    div = basearr[oper++];
+    if (div !== it) return;
+    console.log(`\n【${div}】------start------`);
+    len = basearr[oper];
+    console.log('  长度:', basearr[oper++]);
+    console.log('  ', JSON.stringify(basearr.slice(oper, oper + len)));
+    oper += len;
+  })
+  console.log(`\n当前游标：${oper}, 数组长度：${basearr.length}`);
+}
+
+function parse(basearr) {
+  const funcmap = { parse_133 };
+  const funcname = `parse_${basearr.length}`;
+  const func = funcmap[funcname] || parseOther;
+  func(basearr);
 }
 
 module.exports = function (basearrs) {
