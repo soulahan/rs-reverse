@@ -88,6 +88,10 @@ class GlobalVarible {
     if (attr === 'cp0') {
       cache.cp0_96 = _chunk(value, 96);
     }
+    if (attr === 'argv') {
+      cache.argv.mate = _merge(value.url || {}, value.jsurls || {});
+      cache.version = value.mode;
+    }
   }
 }
 

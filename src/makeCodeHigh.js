@@ -20,6 +20,7 @@ function parseR2mka(text) {
 
 function filenameAddDesc(name, desc) {
   const arr = name.split('.');
+  if (arr.length < 2) arr.push('js');
   if (arr.length < 2) throw new Error(`文件名不正确: ${name}`);
   arr[arr.length - 2] += desc;
   return arr.join('.');
@@ -29,24 +30,24 @@ function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code
   const files = [
     {
       name: 'ts.json',
-      desc: 'url方式提取的ts：',
+      desc: '原始$_ts：',
       text: JSON.stringify(ts),
     },
     {
       name: 'immucfg.json',
-      desc: 'url方式提取的静态文本：',
+      desc: '静态文本：',
       text: JSON.stringify(immucfg),
     },
     {
       name: 'ts-full.json',
-      desc: '程序生成的ts：',
+      desc: '外层虚拟机生成的$_ts：',
       text: JSON.stringify($_ts),
     },
-    jscode,
-    html,
+    html && { ...html, desc: 'html代码：' },
+    jscode && { ...jscode, desc: '外层虚拟机代码：' },
     {
       name: filenameAddDesc(jscode.name, '-dynamic'),
-      desc: `${jscode.name}生成的动态代码：`,
+      desc: `内层虚拟机代码：`,
       text: '// 该行标记来源，非动态代码生成: ' + JSON.stringify(ts) + '\n\n' + code,
     },
     ...appcode,

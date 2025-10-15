@@ -17,6 +17,7 @@ const gv = require('@src/handler/globalVarible');
 const _merge = require('lodash/merge');
 const _omit = require('lodash/omit');
 const _pick = require('lodash/pick');
+const _get = require('lodash/get');
 const { mode_version } = require('@src/config/');
 
 function debugLog(level) {
@@ -77,7 +78,6 @@ const commandBuilder = {
 
 const commandHandler = (command, argv) => {
   gv._setAttr('argv', argv);
-  gv._setAttr('version', argv.mode);
   debugLog(argv.level);
   const outputResolve = (...p) => path.resolve(argv.output, ...p);
   const ts = (() => {
@@ -89,8 +89,9 @@ const commandHandler = (command, argv) => {
   logger.trace(`$_ts.nsd: ${ts.nsd}`);
   logger.trace(`$_ts.cd: ${ts.cd}`);
   try {
-    const immucfg = argv.url ? getImmucfg(argv.url.jscode.code) : gv.config.immucfg;
-    command(ts, immucfg, outputResolve, _merge(argv.url || {}, argv.jsurls || {}));
+    const jscode = _get(gv.argv, 'mate.jscode.code');
+    const immucfg = jscode ? getImmucfg(jscode) : gv.config.immucfg;
+    command(ts, immucfg, outputResolve, gv.argv.mate);
   } catch (err) {
     logger.error(err.stack);
   }

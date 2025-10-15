@@ -2,9 +2,13 @@
 const { request, cookieJar } = require('./request');
 const cheerio = require('cheerio');
 const isValidUrl = require('./isValidUrl');
+const isFile = require('./isFile');
 const logger = require('./logger');
 const _get = require('lodash/get');
 const urlresolve = require('url').resolve;
+const paths = require('./paths');
+const fs = require('fs');
+const path = require('path');
 
 function addRequestHead(uri) {
   return {
@@ -53,7 +57,7 @@ async function getCodeByHtml(url, cookieStr) {
       code: res.body,
       url,
       name: nameHandle(url.split('?')[0].split('/').pop() || 'index', 'html'),
-      desc: 'url方式提取的html代码：'
+      desc: 'html代码：'
     },
     appcode: [],
     url,
@@ -61,33 +65,41 @@ async function getCodeByHtml(url, cookieStr) {
   }
   await getCodeByJs(remotes.map(it => urlresolve(url, it)), ret);
   logger.info(`网络请求用时：${Date.now() - start} ms`);
-  if (ret.jscode) {
-    const val = ret.jscode.code.match(/_\$[\$_A-Za-z0-9]{2}=_\$[\$_A-Za-z0-9]{2}\(0,([0-9]+),_\$[\$_A-Za-z0-9]{2}\(_\$[\$_A-Za-z0-9]{2}\)\)/);
-    if (val && val.length === 2) {
-      ret.keynameNum = parseInt(val[1]);
-    } else {
-      throw new Error('keyname长度未匹配到!');
-    }
-    return ret;
-  }
+  if (ret.jscode) return ret;
   throw new Error('js外链中没有瑞数的代码文件');
 }
 
 async function getCodeByJs(urls, ret = { appcode: [] }) {
-  for(let url of urls) if (!isValidUrl(url)) throw new Error(`输入链接不正确：${url}`);
   for(let jsurl of urls) {
-    const name = jsurl.split('?')[0].split('/').pop();
-    const jscode = await request(addRequestHead(jsurl));
-    const data = {
-      code: jscode.body,
-      url: jsurl,
-      name: nameHandle(name, 'js'),
-      desc: 'url方式提取的javascript代码：'
-    };
-    if (jscode.body.indexOf('$_ts.l__(') === 0) {
+    const data = { desc: 'javascript代码：' };
+    if (isValidUrl(jsurl)) {
+      const resp = await request(addRequestHead(jsurl));
+      Object.assign(data, {
+        from: 'remote',
+        url: jsurl,
+        name: nameHandle(jsurl.split('?')[0].split('/').pop(), 'js'),
+        code: resp.body,
+      })
+    } else if (isFile(paths.resolveCwd(jsurl))) {
+      Object.assign(data, {
+        from: 'local',
+        url: paths.resolveCwd(jsurl),
+        name: path.basename(jsurl) + (jsurl.split('.').pop() === 'js' ? '' : '.js'),
+        code: fs.readFileSync(paths.resolveCwd(jsurl), 'utf8'),
+      });
+    } else {
+      continue;
+    }
+    if (data.code.indexOf('$_ts.l__(') === 0) {
       ret.appcode.push(data);
-    } else if (jscode.body.includes('r2mKa')) {
+    } else if (data.code.includes('r2mKa')) {
       ret.jscode = data;
+      const val = data.code.match(/_\$[\$_A-Za-z0-9]{2}=_\$[\$_A-Za-z0-9]{2}\(0,([0-9]+),_\$[\$_A-Za-z0-9]{2}\(_\$[\$_A-Za-z0-9]{2}\)\)/);
+      if (val && val.length === 2) {
+        ret.keynameNum = parseInt(val[1]);
+      } else {
+        throw new Error('keyname长度未匹配到!');
+      }
     }
   }
   return ret;

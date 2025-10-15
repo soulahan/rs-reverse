@@ -17,24 +17,24 @@ function writeFile(ts, immucfg, { jscode, html, appcode = [] }, $_ts, code, outp
   const files = [
     {
       name: 'ts.json',
-      desc: immucfg ? 'url方式提取的ts：' : '程序接收的ts：',
+      desc: '原始$_ts：',
       text: JSON.stringify(ts),
     },
-    immucfg ? {
-      name: 'immucfg.json',
-      desc: 'url方式提取的静态文本：',
-      text: JSON.stringify(immucfg),
-    } : null,
     {
       name: 'ts-full.json',
-      desc: '程序生成的ts：',
+      desc: '外层虚拟机生成的$_ts：',
       text: JSON.stringify($_ts),
     },
-    html,
-    jscode,
+    {
+      name: 'immucfg.json',
+      desc: '静态文本：',
+      text: JSON.stringify(immucfg),
+    },
+    html && { ...html, desc: 'html代码：' },
+    jscode && { ...jscode, desc: '外层虚拟机代码：' },
     {
       name: jscode ? filenameAddDesc(jscode.name, '-dynamic') : 'dynamic.js',
-      desc: `${jscode?.name || '程序'}生成的动态代码：`,
+      desc: `内层虚拟机代码：`,
       text: '// 该行标记来源，非动态代码生成: ' + JSON.stringify(ts) + '\n\n' + code,
     },
     ...appcode.reduce((ans, it) => {

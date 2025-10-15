@@ -42,8 +42,8 @@ module.exports = (version = mode_version, argv) => {
     default:
       throw new Error(`当前配置版本不存在, 版本编号：${version}`);
   }
-  if (argv?.url?.keynameNum) {
-    config.keynameNum = argv.url.keynameNum;
+  if (argv.mate.keynameNum) {
+    config.keynameNum = argv.mate.keynameNum;
   }
   return {
     ...config,
