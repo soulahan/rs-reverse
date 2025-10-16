@@ -44,6 +44,12 @@ const commandBuilder = {
       return input;
     }
   },
+  j: {
+    alias: 'jsurls',
+    describe: '$_ts.__l方法执行的js文件链接(必须带上查询参数)，多个时需要按顺序传入，如：-j "https://host/chunk.js?4VGu1xaT=a728b2" -j "https://host/app.js?4VGu1xaT=a728b2"',
+    type: 'array',
+    coerce: getCode,
+  },
   m: {
     alias: 'mode',
     describe: `与-f参数一起使用，表示使用的模式版本，当前最新模式版本为${mode_version}`,
@@ -105,15 +111,7 @@ module.exports = yargs
   .command({
     command: 'makecode',
     describe: '接收ts.json文件生成immucfg、ts、ts-full文件，如果传入的是url则还会生成html、主代码、动态代码文件，还可通过-j命令接收多个$_ts.l__处理的文件url并生成该js文件及解密后的js文件',
-    builder: {
-      ...commandBuilder,
-      j: {
-        alias: 'jsurls',
-        describe: '$_ts.__l方法执行的js文件链接(必须带上查询参数)，多个时需要按顺序传入，如：-j "https://host/chunk.js?4VGu1xaT=a728b2" -j "https://host/app.js?4VGu1xaT=a728b2"',
-        type: 'array',
-        coerce: getCode,
-      }
-    },
+    builder: commandBuilder,
     handler: commandHandler.bind(null, makeCode),
   })
   .command({
