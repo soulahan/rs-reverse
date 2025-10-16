@@ -7,9 +7,15 @@ module.exports = function () {
     103, 11, 102, 203, 225,
     181, 208, 180, 100, 127
   ];
-  const maps = values.reduce((ans, value, idx) => {
-    ans[gv.ts.cp[1][gv.r2mka("0>one>71>one>4-355").taskarr[idx * 7 + 6]]] = value;
-    return ans;
-  }, {})
-  return Object.values(gv.keys).filter(it => it.length === 4).map(it => maps[gv.utils.ascii2string(it)]);
+  const keys = [29, 30, 31, 32];
+  const tasks = gv.r2mka("U250200532");
+  for (let task of tasks) {
+    const maps = values.reduce((ans, value, idx) => {
+      ans[gv.ts.cp[1][task.taskori[idx * 7 + 6]]] = value;
+      return ans;
+    }, {})
+    const data = keys.map(it => maps[gv.utils.ascii2string(gv.keys[it])]).filter(it => it !== undefined);
+    if (data.length === keys.length) return data
+  }
+  throw new Error('4位计算数未找到，请检查！');
 }

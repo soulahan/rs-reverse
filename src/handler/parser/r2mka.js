@@ -33,6 +33,15 @@ function gtHandler(str, curr) {
 const parse = (() => {
   let count = 0;
   const valMap = {};
+  const uids = [];
+  const checkUid = (uid, key) => {
+    if (uids.includes(uid)) {
+      // logger.warn(`task: 【 ${key}】uid: 【${uid}】重复定义`);
+    } else {
+      uids.push(uid);
+    }
+    return uid;
+  }
   return function(val, deep = 0, deeps = [0], parent = null) {
     const str = val.taskstr;
     val.parent = parent;
@@ -43,9 +52,13 @@ const parse = (() => {
     } else {
       val.taskarr = str.split('').map(it => it.charCodeAt());
     }
-    val.taskori = val.taskarr; // taskarr会被动态修改，因此存一个备份
+    val.taskori = [...val.taskarr]; // taskarr会被动态修改，因此存一个备份
     val.key = `${deeps.join('>')}-${count++}`;
     valMap[val.key] = val;
+    const uid = [deep, val.lens, val.isReset, val.taskarr.length, val.child_one.length, val.child_two.length].join('-');
+    val.uid = checkUid('U' + gv.utils.string2ascii(gv.utils.hexnum(uid)).join(''), val.key);
+    if (!valMap[val.uid]) valMap[val.uid] = [];
+    valMap[val.uid].push(val)
     val.child_one.map((it, idx) => {
       if (it) {
         parse(it, deep + 1, [...deeps, 'one', idx], val);

@@ -152,7 +152,7 @@ function parseOther(basearr) {
   [3, 10, 7, 0, 6, 2, 9, 13].forEach(it => {
     div = basearr[oper++];
     if (div !== it) return;
-    console.log(`\n【${div}】------start------`);
+    console.log(`\n【${div}】------start------【${oper - 1}】`);
     len = basearr[oper];
     console.log('  长度:', basearr[oper++]);
     console.log('  ', JSON.stringify(basearr.slice(oper, oper + len)));

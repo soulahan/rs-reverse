@@ -28,7 +28,7 @@ module.exports = class {
 
   run() {
     const basearr = getBasearr(this.config)
-    logger.info(`basearr: [${basearr}]`)
+    logger.info(`basearr【${basearr.length}】: [${basearr}]`)
     const nextarr = numarrJoin(
       numarrJoin(
         2,

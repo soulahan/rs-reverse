@@ -18,6 +18,9 @@ module.exports = (config) => {
   if (checkUrl(['epub.cnipa.gov.cn'])) {
     return getBasearr(require('./len133-encrypt111.js'), config);
   }
+  if (checkUrl(['zhaopin.sgcc.com.cn'])) {
+    return getBasearr(require('./len127.js'), config);
+  }
   if (gv.version === 1) return getBasearr(require('./oldMode1.js'), config);
   if (gv.version === 2) return getBasearr(require('./oldMode2.js'), config);
   if (gv.version === 3) return getBasearr(require('./len133-encrypt111.js'), config);
