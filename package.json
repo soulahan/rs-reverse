@@ -1,6 +1,6 @@
 {
   "name": "rs-reverse",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "瑞数算法逆向,website reverse engineering",
   "main": "main.js",
   "directories": {
@@ -12,6 +12,7 @@
   "scripts": {
     "test": "jest ./test/",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand ./test/",
+    "gen:readme": "node ./script/gen-help.js",
     "release": "release-it"
   },
   "logLevel": "warn",

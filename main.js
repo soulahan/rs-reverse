@@ -46,13 +46,13 @@ const commandBuilder = {
   },
   j: {
     alias: 'jsurls',
-    describe: '$_ts.__l方法执行的js文件链接(必须带上查询参数)，多个时需要按顺序传入，如：-j "https://host/chunk.js?4VGu1xaT=a728b2" -j "https://host/app.js?4VGu1xaT=a728b2"',
+    describe: '瑞数加密的js文件链接或者本地js文件路径',
     type: 'array',
     coerce: getCode,
   },
   m: {
     alias: 'mode',
-    describe: `与-f参数一起使用，表示使用的模式版本，当前最新模式版本为${mode_version}`,
+    describe: `与-f参数一起使用，表示使用的模式版本，当前最新模式版本为${mode_version}，用于内置用例开发调试`,
     default: mode_version,
     type: 'number',
     coerce: (input) => {
@@ -62,7 +62,7 @@ const commandBuilder = {
   },
   u: {
     alias: 'url',
-    describe: '瑞数返回204状态码的请求地址, 与-a命令一起使用',
+    describe: '瑞数返回204状态码的请求地址',
     type: 'string',
     coerce: getCode,
   },
@@ -77,8 +77,28 @@ const commandBuilder = {
   },
   l: {
     alias: 'level',
-    describe: '日志打印等级，参考log4js，默认为info',
+    describe: '日志打印等级，参考log4js，默认为warn',
     type: 'string',
+  },
+  c: {
+    alias: 'config',
+    describe: '配置对象，传入对象或者json文件路径',
+    type: 'string',
+    coerce: (input) => {
+      const inputCwd = paths.resolveCwd(input);
+      if (fs.existsSync(inputCwd) && fs.statSync(inputCwd).isFile()) {
+        input = fs.readFileSync(inputCwd, 'utf8')
+      }
+      const data = JSON5.parse(input);
+      gv._setAttr('makecookieRuntimeConfig', data)
+      return data;
+    },
+  },
+  b: {
+    alias: 'basearr',
+    describe: '压缩前数字数组的序列化文本',
+    type: 'array',
+    demandOption: true,
   },
 }
 
@@ -108,71 +128,84 @@ module.exports = yargs
   .alias('v', 'version')
   .version(pkg.version)
   .usage('使用: node $0 <commond> [options]')
-  .command({
-    command: 'makecode',
-    describe: '接收ts.json文件生成immucfg、ts、ts-full文件，如果传入的是url则还会生成html、主代码、动态代码文件，还可通过-j命令接收多个$_ts.l__处理的文件url并生成该js文件及解密后的js文件',
-    builder: commandBuilder,
-    handler: commandHandler.bind(null, makeCode),
-  })
-  .command({
-    command: 'makecode-high',
-    describe: '解码两次请求返回的网站代码(功能涵盖makecode子命令)',
-    builder: {
-      ..._omit(commandBuilder, ['f']),
-      u: {
-        ...commandBuilder.u,
-        demandOption: true,
-      }
+  .command(
+    'makecode',
+    '根据传入的ts文件、网站地址、js文件地址等，生成全量ts文本、静态文本、内外层虚拟机代码等文件',
+    (yargs) => {
+      return yargs
+        .option('f', commandBuilder.f)
+        .option('j', commandBuilder.j)
+        .option('m', commandBuilder.m)
+        .option('u', commandBuilder.u)
+        .option('o', commandBuilder.o)
+        .option('l', commandBuilder.l)
+        .example('$0 makecode')
+        .example('$0 makecode -m 3 -f /path/to/ts.json')
+        .example('$0 makecode -u https://url/index.html')
+        .example('$0 makecode -u https://url/index.html -f /path/to/ts.json')
+        .example('$0 makecode -j https://url/main.js -f /path/to/ts.json')
+        .example('$0 makecode -j /path/to/main.js -f /path/to/ts.json');
     },
-    handler: commandHandler.bind(null, makeCodeHigh),
-  })
-  .command({
-    command: 'makecookie',
-    describe: '生成cookie字符串，可直接复制使用',
-    builder: {
-      ...commandBuilder,
-      c: {
-        alias: 'config',
-        describe: '配置对象，传入对象或者json文件路径',
-        type: 'string',
-        coerce: (input) => {
-          const inputCwd = paths.resolveCwd(input);
-          if (fs.existsSync(inputCwd) && fs.statSync(inputCwd).isFile()) {
-            input = fs.readFileSync(inputCwd, 'utf8')
-          }
-          const data = JSON5.parse(input);
-          gv._setAttr('makecookieRuntimeConfig', data)
-          return data;
-        },
-      },
+    commandHandler.bind(null, makeCode),
+  )
+  .command(
+    'makecode-high',
+    '接收网站地址，生成两次请求对应的全量ts文本、静态文本、内外层虚拟机代码等文件',
+    (yargs) => {
+      return yargs
+        .option('m', commandBuilder.m)
+        .option('u', { ...commandBuilder.u, demandOption: true })
+        .option('o', commandBuilder.o)
+        .option('l', commandBuilder.l)
+        .example('$0 makecode-high -u https://url/index.html');
     },
-    handler: commandHandler.bind(null, makeCookie),
-  })
-  .command({
-    command: 'exec',
-    describe: '直接运行代码，用于开发及演示时使用',
-    builder: {
-      l: {
-        alias: 'level',
-        describe: '日志打印等级，参考log4js，默认为info',
-        type: 'string',
-      },
-      c: {
-        alias: 'code',
-        describe: '要运行的代码，如：gv.cp2，即打印cp2的值',
-        type: 'string',
-        demandOption: true,
-        coerce: (input) => {
-          const inputCwd = paths.resolveCwd(input);
-          if (fs.existsSync(inputCwd) && fs.statSync(inputCwd).isFile()) {
-            return fs.readFileSync(inputCwd, 'utf8')
-          }
-          return input;
-        },
-      },
-      ..._pick(commandBuilder, ['f', 'm']),
+    commandHandler.bind(null, makeCodeHigh),
+  )
+  .command(
+    'makecookie',
+    '生成cookie字符串，包含后台返回+程序生成，可直接复制使用',
+    (yargs) => {
+      return yargs
+        .option('f', commandBuilder.f)
+        .option('j', commandBuilder.j)
+        .option('m', commandBuilder.m)
+        .option('u', commandBuilder.u)
+        .option('o', commandBuilder.o)
+        .option('l', commandBuilder.l)
+        .option('c', commandBuilder.c)
+        .example('$0 makecookie')
+        .example('$0 makecookie -m 3 -f /path/to/ts.json')
+        .example('$0 makecookie -u https://url/index.html')
+        .example('$0 makecookie -u https://url/index.html -f /path/to/ts.json')
+        .example('$0 makecookie -j https://url/main.js -f /path/to/ts.json')
+        .example('$0 makecookie -j /path/to/main.js -f /path/to/ts.json');
     },
-    handler: (argv) => {
+    commandHandler.bind(null, makeCookie),
+  )
+  .command(
+    'exec',
+    '直接运行代码，用于开发及演示时使用',
+    (yargs) => {
+      return yargs
+        .option('l', commandBuilder.l)
+        .option('c', {
+          alias: 'code',
+          describe: '要运行的代码，如：gv.cp2，即打印cp2的值',
+          type: 'string',
+          demandOption: true,
+          coerce: (input) => {
+            const inputCwd = paths.resolveCwd(input);
+            if (fs.existsSync(inputCwd) && fs.statSync(inputCwd).isFile()) {
+              return fs.readFileSync(inputCwd, 'utf8')
+            }
+            return input;
+          },
+        })
+        .option('f', commandBuilder.f)
+        .option('m', commandBuilder.m)
+        .example('$0 exec -m 3 -f /path/to/ts.json -c gv.cp0');
+    },
+    (argv) => {
       debugLog(argv.level);
       Math.random = () => 0.1253744220839037;
       const gv = require('@utils/initGv')(argv);
@@ -186,28 +219,21 @@ module.exports = yargs
         eval(fs.readFileSync(paths.resolve('utils/consoles/keys.js'), 'utf8'));
       }
     }
-  })
-  .command({
-    command: 'basearr',
-    describe: '接收压缩前数字数组的序列化文本并格式化解析',
-    builder: {
-      l: {
-        alias: 'level',
-        describe: '日志打印等级，参考log4js，默认为info',
-        type: 'string',
-      },
-      b: {
-        alias: 'basearr',
-        describe: '压缩前数字数组的序列化文本',
-        type: 'array',
-        demandOption: true,
-      }
+  )
+  .command(
+    'basearr',
+    '接收压缩前数字数组的序列化文本并格式化解析',
+    (yargs) => {
+      return yargs
+        .option('l', commandBuilder.l)
+        .option('b', commandBuilder.b)
+        .example("$0 basearr -b '[3,49,...,103,...,125]' -b '[3,49,...,87,...,125]'")
     },
-    handler: (argv) => {
+    (argv) => {
       debugLog(argv.level);
       basearrParse(argv.basearr);
     }
-  })
+  )
   .updateStrings({
     'Show version number': '显示版本号',
     'Show help': '显示帮助信息',
@@ -218,6 +244,8 @@ module.exports = yargs
   .example('$0 makecode-high -u http://url/path')
   .example("$0 exec -m 3 -c 'ascii2string(gv.keys[21])'")
   .example("$0 basearr -b '[3,49,...,103,...,125]' -b '[3,49,...,87,...,125]'")
-  .epilog('')
+  .demandCommand(1, '请指定要运行的命令')
+  .epilog('更多信息请访问：https://github.com/pysunday/rs-reverse')
+  .strict()
   .argv;
 
