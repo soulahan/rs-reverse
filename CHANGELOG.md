@@ -1,5 +1,23 @@
 
 
+## [1.10.0](https://github.com/pysunday/rs-reverse/compare/1.8.1...1.10.0) (2025-10-16)
+
+
+### Features
+
+* keynameNum和functionSortStart两个可变参数动态获取 ([40347c0](https://github.com/pysunday/rs-reverse/commit/40347c04c13bb2b7295431d143ecb3ebb3145fb7))
+* makecode命令修复，增加网站适配：epub.cnipa.gov.cn ([935966a](https://github.com/pysunday/rs-reverse/commit/935966ad134715fc15dee39d6b899484357fc487))
+* makecookie生成方法分类 ([0fed723](https://github.com/pysunday/rs-reverse/commit/0fed723e297497e39a46d4a75eb5d8fdb49603dd))
+* 适配makecookie、makecode-high ([babcf42](https://github.com/pysunday/rs-reverse/commit/babcf4230a8afaba25df41e80aa44465ed2c94ec))
+* 适配makecookie初版 ([cc4eda3](https://github.com/pysunday/rs-reverse/commit/cc4eda3da1e91bbad4da812cd203fbff82aee99f))
+* 适配网站zhaopin.sgcc.com.cn ([4ee180f](https://github.com/pysunday/rs-reverse/commit/4ee180f530c0e882d3728fcf5f60345c14a6fe07))
+
+
+### Bug Fixes
+
+* -j命令支持本地文件 ([c010117](https://github.com/pysunday/rs-reverse/commit/c010117993bfcd7340482dd277c99a50e99ea60e))
+* 修改日志打印和默认等级 ([f343cde](https://github.com/pysunday/rs-reverse/commit/f343cdedb14c6964717c6e7fce398633fefb6c20))
+
 ## [1.8.1](https://github.com/pysunday/rs-reverse/compare/1.8.0...1.8.1) (2025-09-09)
 
 
