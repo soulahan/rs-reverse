@@ -66,8 +66,8 @@ module.exports = function (ts, immucfg, outputResolve, mate = {}) {
     appcode.decryptCode = new AppCode(AppCode.getParams(appcode.code), idx + 1).run();
   });
   const files = writeFile(ts, immucfg, mate, $_ts, code, outputResolve);
-  logger.info([
-    `代码还原成功！用时：${new Date().getTime() - startTime}ms\n`,
+  console.log([
+    `\n代码还原成功！用时：${new Date().getTime() - startTime}ms\n`,
     ...files.reduce((ans, it, idx) => ([...ans, typeof it === 'string' ? it : `${it.desc}${paths.relative(it.filepath)}${idx === files.length - 1 || it.newLine ? '\n' : ''}`]), []),
   ].join('\n  '));
 }

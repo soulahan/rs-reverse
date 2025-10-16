@@ -88,13 +88,13 @@ module.exports = async function (ts, immucfg, outputResolve, mate) {
   }
   const startTime = new Date().getTime();
   const [files, cookieStr] = firstStep(ts, immucfg, mate, outputResolve);
-  files.unshift('\n第1次请求：\n');
+  files.unshift('\n第1次请求保存文件：\n');
   const result = await getCode(mate.url, cookieStr);
   if (result.statusCode !== 200) throw new Error(`第二次请求返回状态码非200（${result.statusCode}）`);
-  files.push('\n第2次请求：\n', ...secondStep(result.$_ts, getImmucfg(result.jscode.code), result, outputResolve));
+  files.push('\n第2次请求保存文件：\n', ...secondStep(result.$_ts, getImmucfg(result.jscode.code), result, outputResolve));
   files.forEach(({ filepath, text, code }) => filepath && fs.writeFileSync(filepath, text || code));
-  logger.info([
-    `代码还原成功！用时：${new Date().getTime() - startTime}ms\n`,
+  console.log([
+    `\n代码还原成功！用时：${new Date().getTime() - startTime}ms\n`,
     ...files.reduce((ans, it, idx) => ([...ans, typeof it === 'string' ? it : `${it.desc}${paths.relative(it.filepath)}${idx === files.length - 1 || it.newLine ? '\n' : ''}`]), []),
   ].join('\n  '));
 }

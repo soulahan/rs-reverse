@@ -14,7 +14,7 @@
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand ./test/",
     "release": "release-it"
   },
-  "logLevel": "info",
+  "logLevel": "warn",
   "repository": {
     "type": "git",
     "url": "https://github.com/pysunday/rs-reverse"

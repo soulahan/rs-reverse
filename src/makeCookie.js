@@ -41,14 +41,14 @@ module.exports = function (ts, immucfg, outputResolve) {
   const r2mkaText = parseR2mka(coder.r2mkaText);
   const cookie = new Cookie($_ts, r2mkaText, coder, code).run();
   if (gv.metaContent) {
-    // logger.info(`存在meta-content值：${gv.metaContent.content} 解析结果：${gv.metaContent.value}`);
+    console.log(`\n存在meta-content值：${gv.metaContent.content}\n解析结果：${gv.metaContent.value}`);
   }
-  logger.info(`成功生成cookie（长度：${cookie.length}），用时：${new Date().getTime() - startTime}ms`);
+  console.log(`\n成功生成cookie（长度：${cookie.length}），用时：${new Date().getTime() - startTime}ms`);
   const cookieStr = [
     gv.utils.ascii2string(gv.keys[7]).split(';')[5] + 'T=' + cookie,
     ...(gv.argv.url?.cookie ?? []),
   ].join(';')
-  logger.info(`cookie值: ${cookieStr}`)
+  console.log(`cookie值: ${cookieStr}`)
   return cookie;
 }
 
