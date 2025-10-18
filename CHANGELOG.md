@@ -1,5 +1,7 @@
 
 
+## [1.10.1](https://github.com/pysunday/rs-reverse/compare/1.10.0...1.10.1) (2025-10-18)
+
 ## [1.10.0](https://github.com/pysunday/rs-reverse/compare/1.8.1...1.10.0) (2025-10-16)
 
 
