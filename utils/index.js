@@ -1,6 +1,10 @@
-exports.logger = require('./logger');
-exports.isValidUrl = require('./isValidUrl');
-exports.paths = require('./paths');
-exports.getCode = require('./getCode');
-exports.findFullString = require('./findFullString');
-exports.getImmucfg = require('./getImmucfg');
+module.exports = {
+  logger: require('./logger'),
+  isValidUrl: require('./isValidUrl'),
+  paths: require('./paths'),
+  getCode: require('./getCode'),
+  findFullString: require('./findFullString'),
+  getImmucfg: require('./getImmucfg'),
+  initGv: require('./initGv'),
+  ...require('./simpleCrypt'),
+}

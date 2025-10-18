@@ -2,6 +2,7 @@ const _merge = require('lodash/merge');
 const _chunk = require('lodash/chunk');
 const _get = require('lodash/get');
 const _set = require('lodash/set');
+const _cloneDeep = require('lodash/cloneDeep');
 const config = require('@src/config/');
 const makecookieRuntimeConfig = require('@src/config/makecookieRuntimeConfig');
 
@@ -10,18 +11,11 @@ const cache = {};
 class GlobalVarible {
   get config() {
     // 不同版本的可变配置
-    if (!cache.config) {
-      cache.config = config(cache.version, cache.argv);
-    }
     return cache.config
   }
   get makecookieRuntimeConfig() {
     // 生成cookie需要的配置项
     return { ...makecookieRuntimeConfig, ...(cache.makecookieRuntimeConfig || {}) };
-  }
-  get version() {
-    // 代码版本
-    return cache.version || cache.argv.mode;
   }
   get metaContent() {
     return cache.metaContent;
@@ -88,11 +82,23 @@ class GlobalVarible {
     if (attr === 'cp0') {
       cache.cp0_96 = _chunk(value, 96);
     }
-    if (attr === 'argv') {
-      cache.argv.mate = _merge(value.url || {}, value.jsurls || {});
-      cache.version = value.mode;
-    }
   }
 }
+const gv = new GlobalVarible();
 
-module.exports = new GlobalVarible();
+module.exports = gv;
+
+module.exports.wrap = function gvwrap(func) {
+  return (command, argv = {}) => {
+    if (command && typeof command === 'object') argv = command;
+    gv._setAttr('argv', {
+      ..._cloneDeep(argv),
+      mate: _merge(argv.url || {}, argv.jsurls || {}),
+    });
+    config(gv);
+    if (func) {
+      return command && typeof command === 'function' ? func(command, gv) : func(gv);
+    }
+    return gv;
+  }
+}

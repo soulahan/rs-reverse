@@ -1,24 +1,21 @@
 #!/usr/bin/env node
-const JSON5 = require('json5');
-const path = require('path');
-const paths = require('./utils/paths');
-require('module-alias')(path.dirname(paths.package));
-const yargs = require('yargs');
 const fs = require('fs');
-const makeCode = require('@src/makeCode');
-const makeCodeHigh = require('@src/makeCodeHigh');
-const makeCookie = require('@src/makeCookie');
-const basearrParse = require('@src/basearrParse');
-const utils = require('@utils/');
-const { logger, getCode, getImmucfg } = utils;
-const pkg = require(paths.package);
-const log4js = require('log4js');
-const gv = require('@src/handler/globalVarible');
+const JSON5 = require('json5');
 const _merge = require('lodash/merge');
 const _omit = require('lodash/omit');
 const _pick = require('lodash/pick');
 const _get = require('lodash/get');
-const { mode_version } = require('@src/config/');
+const inquirerSelect = require('@inquirer/select').default;
+const path = require('path');
+const yargs = require('yargs');
+const log4js = require('log4js');
+const paths = require('./utils/paths');
+require('module-alias')(path.dirname(paths.package));
+const pkg = require(paths.package);
+const gv = require('@src/handler/globalVarible');
+const adapts = require('@src/handler/basearr/index').adapts;
+const { initGv, logger, getCode, getImmucfg, simpleEncrypt, simpleDecrypt, isValidUrl } = require('@utils/')
+const { makeCode, makeCookie, makeCodeHigh, basearrParse } = require('@src/');
 
 function debugLog(level) {
   if (level) {
@@ -36,7 +33,7 @@ function debugLog(level) {
 const commandBuilder = {
   f: {
     alias: 'file',
-    describe: '含有nsd, cd值的json文件, 不传则取与模式版本(-m)匹配的默认ts文件',
+    describe: '含有nsd, cd值的json文件',
     type: 'string',
     coerce: (input) => {
       input = paths.resolveCwd(input);
@@ -49,16 +46,6 @@ const commandBuilder = {
     describe: '瑞数加密的js文件链接或者本地js文件路径',
     type: 'array',
     coerce: getCode,
-  },
-  m: {
-    alias: 'mode',
-    describe: `与-f参数一起使用，表示使用的模式版本，当前最新模式版本为${mode_version}，用于内置用例开发调试`,
-    default: mode_version,
-    type: 'number',
-    coerce: (input) => {
-      if (isNaN(input) || input < 1 || input > mode_version) throw new Error(`模式版本不合法！取值应该在1~${mode_version}之间`);
-      return input;
-    },
   },
   u: {
     alias: 'url',
@@ -102,26 +89,38 @@ const commandBuilder = {
   },
 }
 
-const commandHandler = (command, argv) => {
-  gv._setAttr('argv', argv);
+const notUrlHanlde = async (config, ts) => {
+  if (isValidUrl(ts.from)) {
+    config.hostname = simpleEncrypt(ts.from.split('/')[2], 57);
+    return;
+  }
+  config.hostname = await inquirerSelect({
+    message: '请选择来源数据来源：',
+    choices: adapts.map(it => ({
+      name: simpleDecrypt(it, 57),
+      value: it,
+    }))
+  })
+}
+
+const commandHandler = gv.wrap(async (command, { argv, config }) => {
   debugLog(argv.level);
   const outputResolve = (...p) => path.resolve(argv.output, ...p);
   const ts = (() => {
-    if (argv.file) return JSON.parse(fs.readFileSync(argv.file, 'utf8'));
+    if (argv.file) return JSON5.parse(fs.readFileSync(argv.file, 'utf8'));
     if (argv.url) return argv.url.$_ts;
-    const tspath = paths.exampleResolve('codes', `${argv.mode}-\$_ts.json`)
-    return JSON.parse(fs.readFileSync(tspath, 'utf8'))
+    const tspath = paths.exampleResolve('codes', '$_ts.json')
+    return JSON5.parse(fs.readFileSync(tspath, 'utf8'))
   })();
+  if (!argv.mate.url && argv._[0] === 'makecookie' && argv.mate.jscode) await notUrlHanlde(config, ts);
   logger.trace(`$_ts.nsd: ${ts.nsd}`);
   logger.trace(`$_ts.cd: ${ts.cd}`);
   try {
-    const jscode = _get(gv.argv, 'mate.jscode.code');
-    const immucfg = jscode ? getImmucfg(jscode) : gv.config.immucfg;
-    command(ts, immucfg, outputResolve, gv.argv.mate);
+    command(ts, outputResolve);
   } catch (err) {
     logger.error(err.stack);
   }
-}
+});
 
 module.exports = yargs
   .help('h')
@@ -135,12 +134,11 @@ module.exports = yargs
       return yargs
         .option('f', commandBuilder.f)
         .option('j', commandBuilder.j)
-        .option('m', commandBuilder.m)
         .option('u', commandBuilder.u)
         .option('o', commandBuilder.o)
         .option('l', commandBuilder.l)
         .example('$0 makecode')
-        .example('$0 makecode -m 3 -f /path/to/ts.json')
+        .example('$0 makecode -f /path/to/ts.json')
         .example('$0 makecode -u https://url/index.html')
         .example('$0 makecode -u https://url/index.html -f /path/to/ts.json')
         .example('$0 makecode -j https://url/main.js -f /path/to/ts.json')
@@ -168,13 +166,12 @@ module.exports = yargs
       return yargs
         .option('f', commandBuilder.f)
         .option('j', commandBuilder.j)
-        .option('m', commandBuilder.m)
         .option('u', commandBuilder.u)
         .option('o', commandBuilder.o)
         .option('l', commandBuilder.l)
         .option('c', commandBuilder.c)
         .example('$0 makecookie')
-        .example('$0 makecookie -m 3 -f /path/to/ts.json')
+        .example('$0 makecookie -f /path/to/ts.json')
         .example('$0 makecookie -u https://url/index.html')
         .example('$0 makecookie -u https://url/index.html -f /path/to/ts.json')
         .example('$0 makecookie -j https://url/main.js -f /path/to/ts.json')
@@ -187,6 +184,8 @@ module.exports = yargs
     '直接运行代码，用于开发及演示时使用',
     (yargs) => {
       return yargs
+        .option('f', commandBuilder.f)
+        .option('j', commandBuilder.j)
         .option('l', commandBuilder.l)
         .option('c', {
           alias: 'code',
@@ -202,18 +201,16 @@ module.exports = yargs
           },
         })
         .option('f', commandBuilder.f)
-        .option('m', commandBuilder.m)
-        .example('$0 exec -m 3 -f /path/to/ts.json -c gv.cp0');
+        .example('$0 exec -f /path/to/ts.json -c gv.cp0');
     },
     (argv) => {
       debugLog(argv.level);
       Math.random = () => 0.1253744220839037;
-      const gv = require('@utils/initGv')(argv);
+      initGv(argv);
       Object.assign(global, gv.utils);
       Object.assign(global, require('@src/handler/viewer/'));
-      let output = '';
       if (argv.code) {
-        output = JSON.stringify(eval(argv.code));
+        const output = JSON.stringify(eval(argv.code));
         console.log([`\n  输入：${argv.code}`, `输出：${output}\n`].join('\n  '));
       } else {
         eval(fs.readFileSync(paths.resolve('utils/consoles/keys.js'), 'utf8'));
@@ -239,10 +236,10 @@ module.exports = yargs
     'Show help': '显示帮助信息',
   })
   .example('$0 makecode -u http://url/path')
-  .example('$0 makecookie -f /path/to/ts.json -m 3')
+  .example('$0 makecookie -f /path/to/ts.json')
   .example('$0 makecookie -u http://url/path')
   .example('$0 makecode-high -u http://url/path')
-  .example("$0 exec -m 3 -c 'ascii2string(gv.keys[21])'")
+  .example("$0 exec -c 'ascii2string(gv.keys[21])'")
   .example("$0 basearr -b '[3,49,...,103,...,125]' -b '[3,49,...,87,...,125]'")
   .demandCommand(1, '请指定要运行的命令')
   .epilog('更多信息请访问：https://github.com/pysunday/rs-reverse')

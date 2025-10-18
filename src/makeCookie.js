@@ -6,12 +6,6 @@ const paths = require('@utils/paths');
 const fs = require('fs');
 const gv = require('@src/handler/globalVarible');
 
-function parseR2mka(text) {
-  const start = text.indexOf('"') + 1;
-  const end = text.lastIndexOf('"') - 2;
-  return unescape(text.substr(start, end));
-}
-
 function writefile(ts, immucfg, outputResolve) {
   // 如果是url形式的则保存ts和immucfg
   const now = new Date().getTime();
@@ -32,17 +26,17 @@ function writefile(ts, immucfg, outputResolve) {
   logger.info('url方式保存文件：\n\n  ' + files.reduce((ans, it, idx) => ([...ans, `${it.desc}${it.filepath}${idx === files.length - 1 ? '\n' : ''}`]), []).join('\n  '));
 }
 
-module.exports = function (ts, immucfg, outputResolve) {
+module.exports = function (ts, outputResolve) {
   gv._setAttr('_ts', ts);
   // if (immucfg) writefile(ts, immucfg, outputResolve);
   const startTime = new Date().getTime();
-  const coder = new Coder(ts, immucfg);
-  const { code, $_ts } = coder.run();
-  const r2mkaText = parseR2mka(coder.r2mkaText);
-  const cookie = new Cookie($_ts, r2mkaText, coder, code).run();
-  if (gv.metaContent) {
-    console.log(`\n存在meta-content值：${gv.metaContent.content}\n解析结果：${gv.metaContent.value}`);
-  }
+  const coder = new Coder(ts, gv.config.immucfg);
+  const { code, $_ts, codemap } = coder.run().genCodemap();
+  gv.config.codemap = codemap;
+  const cookie = new Cookie(coder).run();
+  gv.metaContent?.forEach(({content, value}) => {
+    console.log(`\n存在meta-content值：${content}\n解析结果：${value}`);
+  });
   console.log(`\n成功生成cookie（长度：${cookie.length}），用时：${new Date().getTime() - startTime}ms`);
   const cookieStr = [
     gv.utils.ascii2string(gv.keys[7]).split(';')[5] + 'T=' + cookie,

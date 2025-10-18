@@ -12,12 +12,6 @@ const getCode = require('@utils/getCode');
 const { getLength } = require('@src/handler/parser/common');
 const getImmucfg = require('@utils/getImmucfg');
 
-function parseR2mka(text) {
-  const start = text.indexOf('"') + 1;
-  const end = text.lastIndexOf('"') - 2;
-  return unescape(text.substr(start, end));
-}
-
 function filenameAddDesc(name, desc) {
   const arr = name.split('.');
   if (arr.length < 2) arr.push('js');
@@ -64,10 +58,10 @@ function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code
 function firstStep(ts, immucfg, mate, outputResolve) {
   gv._setAttr('_ts', ts);
   const coder = new Coder(ts, immucfg);
-  const { code, $_ts } = coder.run();
+  const { code, $_ts, codemap } = coder.run().genCodemap();
+  gv.config.codemap = codemap;
   const files = writeFile('first', ts, immucfg, mate, $_ts, code, outputResolve);
-  const r2mkaText = parseR2mka(coder.r2mkaText);
-  const cookieVal = new Cookie($_ts, r2mkaText, coder, code).run();
+  const cookieVal = new Cookie(coder).run();
   const cookieKey = gv.utils.ascii2string(gv.keys[7]).split(';')[5] + 'T';
   return [files, `${cookieKey}=${cookieVal}`];
 }
@@ -82,12 +76,13 @@ function secondStep(ts, immucfg, mate, outputResolve) {
   return writeFile('second', ts, immucfg, mate, $_ts, code, outputResolve);
 }
 
-module.exports = async function (ts, immucfg, outputResolve, mate) {
+module.exports = async function (ts, outputResolve) {
+  const mate = gv.argv.mate;
   if (fs.existsSync(outputResolve('makecode-high'))) {
     fse.moveSync(outputResolve('makecode-high'), outputResolve('makecode-high-old'), { overwrite: true });
   }
   const startTime = new Date().getTime();
-  const [files, cookieStr] = firstStep(ts, immucfg, mate, outputResolve);
+  const [files, cookieStr] = firstStep(ts, gv.config.immucfg, mate, outputResolve);
   files.unshift('\n第1次请求保存文件：\n');
   const result = await getCode(mate.url, cookieStr);
   if (result.statusCode !== 200) throw new Error(`第二次请求返回状态码非200（${result.statusCode}）`);

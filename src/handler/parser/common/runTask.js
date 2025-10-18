@@ -6,7 +6,13 @@ const logger = require('@utils/logger');
 const custask = require('../task');
 const error = require('@utils/error');
 
-module.exports = function(task, args, allowTask) {
+function runTaskByUid(uid, ...params) {
+  const tasks = gv.r2mka(uid);
+  if (!tasks || tasks.length !== 1) throw new Error(`当前任务${uid}未找到或者不唯一，请检查！`);
+  return runTask(tasks.pop(), ...params);
+}
+
+function runTask(task, args, allowTask) {
   if (typeof task === 'string') task = gv.r2mka(task);
   if (!task) throw new Error('任务未找到');
   logger.debug(`${task.key}执行开始!`);
@@ -141,3 +147,4 @@ function dynamicExec(taskItem, start = 0, args = [], loop_res = {}, global_res =
   return ret[5];
 }
 
+module.exports = { runTask, runTaskByUid }

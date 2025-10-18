@@ -4,13 +4,13 @@ const dataOper = require('./dataOper');
 const arraySwap = require('./arraySwap');
 const initTs = require('./initTs');
 const findFullString = require('@/utils/findFullString');
-const gv = require('@src/handler/globalVarible');
 const getCodemap = require('@utils/getCodemap');
+const unescape = require('@utils/unescape');
 
 module.exports = class {
   constructor(ts, immucfg) {
     this.startTime = new Date().getTime();
-    this.$_ts = initTs(ts, immucfg || gv.config.immucfg);
+    this.$_ts = initTs(ts, immucfg);
     this.scd = getScd(this.$_ts.nsd);
     this.keynames = this.$_ts.cp[1];
     this.keycodes = []
@@ -18,7 +18,7 @@ module.exports = class {
     this.opmate = this.mateOper();
     this.opdata = dataOper();
     this.r2mkaText = null;
-    this.immucfg = immucfg || gv.config.immucfg;
+    this.immucfg = immucfg;
     this.functionsNameSort = []; // 存放vm代码中定义的方法，用于计算代码特征码使用
     this.mainFunctionIdx = null; // 主函数（编号为1）在代码中的开始与结束下标
   }
@@ -31,20 +31,22 @@ module.exports = class {
     if (!this.immucfg.globalText3) {
       const subStr = `r2mKa${codeStr.includes('r2mKa0') ? '0' : '1'}`;
       this.immucfg.globalText3 = findFullString(codeStr, subStr);
-      gv._setAttr('config.immucfg', this.immucfg);
     }
     this.parseTs(codeStr);
     this.endTime = new Date().getTime();
-    const result = {
-      code: codeStr,
-      $_ts: this.$_ts,
-    }
-    if (gv.argv._[0] !== 'makecode') {
-      const codemap = getCodemap(codeStr);
-      result.codemap = codemap;
-      gv.config.codemap = codemap;
-    }
-    return result;
+    this.code = codeStr;
+    return this;
+  }
+
+  genCodemap() {
+    if (!this.codemap) this.codemap = getCodemap(this.code);
+    return this;
+  }
+
+  parseR2mka(text) {
+    const start = text.indexOf('"') + 1;
+    const end = text.lastIndexOf('"') - 2;
+    return unescape(text.substr(start, end));
   }
 
   parseTs(codeStr) {
@@ -90,8 +92,9 @@ module.exports = class {
     opmate.setMate();
     this.keycodes.push(...optext.getLine(optext.getCode() * 55295 + optext.getCode()).split(String.fromCharCode(257)));
     opmate.setMate();
-    this.r2mkaText = optext.getLine(optext.getCode() * 55295 + optext.getCode())
-    this.keycodes.push(this.r2mkaText);
+    const r2mkaText = optext.getLine(optext.getCode() * 55295 + optext.getCode())
+    this.keycodes.push(r2mkaText);
+    this.r2mkaText = this.parseR2mka(r2mkaText);
     // 代码段数量
     opmate.setMate('G_code_num', true);
     for (let i = 0; i < opmate.getMateOri('G_code_num'); i++) {
@@ -175,10 +178,12 @@ module.exports = class {
     codeArr.push(opmate.getMate('_$$6'), ",", opmate.getMate('_$aw'), "=", opmate.getMate('G_$kv'), "[", current, "];");
     codeArr.push("while(1){", opmate.getMate('_$cu'), "=", opmate.getMate('_$aw'), "[", opmate.getMate('_$ku'), "++];");
     codeArr.push("if(", opmate.getMate('_$cu'), "<", opmate.getMateOri('_$bf'), "){");
-    if (gv.argv._[0] !== 'makecode') {
+    try {
       if ([1, 2, 3, 4].includes(current)) {
         this.functionsSort(current, functionsNameMap);
       }
+    } catch(err) {
+      logger.error('排序函数生成失败，会影响cookie生成！');
     }
     const codelist = this.grenIfelse(0, opmate.getMateOri('_$bf'), []);
     codeArr.push(...codelist);

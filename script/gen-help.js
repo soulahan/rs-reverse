@@ -12,24 +12,26 @@ const getHelpCode = (command) => {
 }
 
 const helpMap = {
-  makecodeHelp: getHelpCode('makecode -h'),
-  makecodeHighHelp: getHelpCode('makecode-high -h'),
-  makecookieHelp: getHelpCode('makecookie -h'),
   execHelp: getHelpCode('exec -h'),
   execExample: [
-    getHelpCode("exec -m 2 -c '+ascii2string(gv.keys[21])'"),
-    getHelpCode("exec -m 3 -c '+ascii2string(gv.keys[21])'"),
+    getHelpCode("exec -c '+ascii2string(gv.keys[21])'"),
+    getHelpCode("exec -c '+ascii2string(gv.keys[21])' -j ./example/codes/main.js -f ./example/codes/\\$_ts.json"),
   ].join('\n\n'),
+  makecodeHelp: getHelpCode('makecode -h'),
   makecodeExample: [
-    getHelpCode('makecode -m 2'),
+    getHelpCode('makecode'),
     getHelpCode('makecode -u http://epub.cnipa.gov.cn/'),
+    getHelpCode("makecode -j ./example/codes/main.js -f ./example/codes/\\$_ts.json"),
   ].join('\n\n'),
+  makecodeHighHelp: getHelpCode('makecode-high -h'),
   makecodeHighExample: [
-    getHelpCode('makecode-high -u http://epub.cnipa.gov.cn/'),
+    getHelpCode('makecode-high -u https://zhaopin.sgcc.com.cn/sgcchr/static/home.html'),
   ].join('\n'),
+  makecookieHelp: getHelpCode('makecookie -h'),
   makecookieExample: [
-    getHelpCode('makecookie -m 2'),
+    getHelpCode('makecookie'),
     getHelpCode('makecookie -u http://epub.cnipa.gov.cn/'),
+    getHelpCode("makecookie -j ./example/codes/main.js -f ./example/codes/\\$_ts.json"),
   ].join('\n\n'),
 }
 

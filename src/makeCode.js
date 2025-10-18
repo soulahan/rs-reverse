@@ -4,7 +4,7 @@ const paths = require('@utils/paths');
 const fs = require('fs');
 const fse = require('fs-extra');
 const logger = require('@utils/logger');
-const { init } = require('@src/handler/parser/');
+const gv = require('@src/handler/globalVarible');
 
 function filenameAddDesc(name, desc) {
   const arr = name.split('.');
@@ -54,18 +54,18 @@ function writeFile(ts, immucfg, { jscode, html, appcode = [] }, $_ts, code, outp
   return files;
 }
 
-module.exports = function (ts, immucfg, outputResolve, mate = {}) {
+module.exports = function (ts, outputResolve) {
+  const mate = gv.argv.mate;
   const startTime = new Date().getTime();
   if (fs.existsSync(outputResolve('makecode'))) {
     fse.moveSync(outputResolve('makecode'), outputResolve('makecode-old'), { overwrite: true });
   }
-  const coder = new Coder(ts, immucfg);
+  const coder = new Coder(ts, gv.config.immucfg);
   const { code, $_ts } = coder.run();
-  // init($_ts);
   mate.appcode?.forEach((appcode, idx) => {
     appcode.decryptCode = new AppCode(AppCode.getParams(appcode.code), idx + 1).run();
   });
-  const files = writeFile(ts, immucfg, mate, $_ts, code, outputResolve);
+  const files = writeFile(ts, coder.immucfg, mate, $_ts, code, outputResolve);
   console.log([
     `\n代码还原成功！用时：${new Date().getTime() - startTime}ms\n`,
     ...files.reduce((ans, it, idx) => ([...ans, typeof it === 'string' ? it : `${it.desc}${paths.relative(it.filepath)}${idx === files.length - 1 || it.newLine ? '\n' : ''}`]), []),

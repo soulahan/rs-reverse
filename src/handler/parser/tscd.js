@@ -3,7 +3,7 @@ const gv = require('../globalVarible');
 const decrypt = require('./common/decrypt');
 const logger = require('@utils/logger');
 const numToNumarr4 = require('./common/numToNumarr4');
-const runTask = require('./common/runTask');
+const { runTaskByUid } = require('./common/runTask');
 const custask = require('./task');
 const error = require('@utils/error');
 
@@ -43,10 +43,10 @@ function getTaskarr(arr, idx, ans = {}) {
 
 exports.init = function() {
   const cdArr = decrypt(gv.ts.cd);
-  const start = gv.r2mka('0>one>23-25').taskarr[9] + 2;
+  const start = 2;
   const end = (cdArr[0] << 8 | cdArr[1]) + start;
   const one = parse(cdArr.slice(start, end));
-  const offset = runTask('0>one>22-24', [], getTaskarr(one, one[3])); // 获取解密用偏移值数组
+  const offset = runTaskByUid('U14124020', [], getTaskarr(one, one[3])); // 获取解密用偏移值数组
   gv._setAttr('dynamicTaskOffset', offset);
   gv._setAttr('dynamicTask', getTaskarr(one, one[3]));
   const ans = cdArr.slice(end).map((item, idx) => {

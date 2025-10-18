@@ -45,7 +45,8 @@ async function getCodeByHtml(url, cookieStr) {
   const tsscript = scripts.map(ele => $(ele).text()).filter(text => text.includes('$_ts.nsd') && text.includes('$_ts.cd'));
   if (!tsscript.length) throw new Error(`${res.body}\n错误：链接返回结果未找到cd或nsd, 请检查!`);
   const $_ts = Function('window', tsscript[0] + 'return $_ts')({});
-  $_ts.metaContent = _get($('meta[r=m]'), '0.attribs.content');
+  const metaContent = Array.from($('meta[r=m]')).map(it => it.attribs.content);
+  $_ts.from = url;
   const checkSrc = (src) => (!src || (src[0] !== '/' && src.indexOf(url) === -1) || src.split('.').pop().split('?')[0] !== 'js') ? undefined : src;
   const remotes = scripts.map(it => checkSrc(it.attribs.src)).filter(Boolean);
   if (!remotes.length) throw new Error('未找到js外链，无法提取配置文本请检查!');
@@ -53,6 +54,7 @@ async function getCodeByHtml(url, cookieStr) {
     cookie: cookieJar.getCookieString(url).split('; '),
     $_ts,
     jscode: null,
+    metaContent,
     html: {
       code: res.body,
       url,
@@ -94,12 +96,6 @@ async function getCodeByJs(urls, ret = { appcode: [] }) {
       ret.appcode.push(data);
     } else if (data.code.includes('r2mKa')) {
       ret.jscode = data;
-      const val = data.code.match(/_\$[\$_A-Za-z0-9]{2}=_\$[\$_A-Za-z0-9]{2}\(0,([0-9]+),_\$[\$_A-Za-z0-9]{2}\(_\$[\$_A-Za-z0-9]{2}\)\)/);
-      if (val && val.length === 2) {
-        ret.keynameNum = parseInt(val[1]);
-      } else {
-        throw new Error('keyname长度未匹配到!');
-      }
     }
   }
   return ret;

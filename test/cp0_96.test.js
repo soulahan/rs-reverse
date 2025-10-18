@@ -1,4 +1,4 @@
-const gv = require('../utils/initGv')({ mode: 3 });
+const gv = require('../utils/initGv')();
 const { main, swap4, swap2, hexnum, stringReverse, init } = gv.utils;
 
 const valueMap = {
@@ -77,7 +77,7 @@ const valueMap = {
   'Skype.Detection': swap4(gv.cp0_96(10, 53)) + hexnum(gv.cp0_96(6, 23)),
 }
 
-test('mode3 test cp0_96', () => {
+test('cp0_96数据对比', () => {
   Object.entries(valueMap).forEach(([tb, ex]) => {
     expect(tb).toBe(ex);
   })

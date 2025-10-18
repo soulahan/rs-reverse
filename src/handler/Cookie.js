@@ -16,10 +16,9 @@ const {
 } = parser;
 
 module.exports = class {
-  constructor(ts, r2mkaText, coder, vmcode) {
+  constructor(coder) {
     this.coder = coder;
-    this.vmcode = vmcode;
-    parser.init(ts, r2mkaText)
+    parser.init(coder)
     this.config = { ...gv.makecookieRuntimeConfig };
     if (!this.config.codeUid) this.config.codeUid = this.getCodeUid();
     if (!this.config.r2mkaTime) this.config.r2mkaTime = +ascii2string(gv.keys[21]);
@@ -59,7 +58,7 @@ module.exports = class {
   }
 
   getCodeUid() {
-    const mainFunctionCode = this.vmcode.slice(...this.coder.mainFunctionIdx);
+    const mainFunctionCode = this.coder.code.slice(...this.coder.mainFunctionIdx);
     const one = uuid(this.coder.functionsNameSort[ascii2string(gv.keys[33])].code);
     const len = parseInt(mainFunctionCode.length / 100);
     const start = len * ascii2string(gv.keys[34]);

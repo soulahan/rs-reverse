@@ -3,6 +3,7 @@ module.exports = {
   ...require('./tools'),
   ...require('./swap'),
   ...require('./modeEncrypt'),
+  ...require('./runTask'),
   main: require('./main'),
   hexnum: require('./hexnum'),
   combine4: require('./combine4'),
@@ -22,7 +23,6 @@ module.exports = {
   numarr2string: require('./numarr2string'),
   numarrJoin: require('./numarrJoin'),
   numarrAlterByNumber: require('./numarrAlterByNumber'),
-  runTask: require('./runTask'),
   fixedValue20: require('./fixedValue20'),
 }
 

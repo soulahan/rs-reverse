@@ -1,5 +1,23 @@
+const fs = require('fs');
+const path = require('path');
 const { numarrEncrypt } = require('../parser/');
 const gv = require('../globalVarible');
+const logger = require('@utils/logger');
+const { simpleDecrypt, simpleEncrypt } = require('@utils/simpleCrypt');
+
+const modMap = fs.readdirSync(__dirname)
+  .filter(f => f.endsWith('.js') && f !== 'index.js')
+  .map(f => require(path.join(__dirname, f)))
+  .reduce((ans, mod) => {
+    mod.adapt?.forEach(it => {
+      if (ans[it]) logger.warn(`${it}(${simpleDecrypt(it)})存在重复适配，请检查！`);
+      ans[it] = {
+        key: it,
+        func: mod,
+      };
+    });
+    return ans;
+  }, {});
 
 function getBasearr(func, config, deep = 0) {
   if (deep >= 1000) throw new Error('生成cookie尝试次数过多')
@@ -8,20 +26,14 @@ function getBasearr(func, config, deep = 0) {
   return basearr;
 }
 
-function checkUrl(urls) {
-  if (!gv.argv.url?.url) return false;
-  const currentUrl = gv.argv.url.url.split('/')[2];
-  return urls.filter(url => url === currentUrl).length;
+module.exports = (config) => {
+  const mod = modMap[gv.config.hostname] || modMap[simpleEncrypt(gv.config.hostname)];
+  if (mod) {
+    logger.debug(`当前已适配，使用【${mod.key}(${simpleDecrypt(mod.key)})】生成basearr`);
+    return getBasearr(mod.func, config);
+  }
+  logger.debug('默认适配器生成basearr');
+  return getBasearr(modMap['XElMWxdaV1BJWBdeVk8XWlc='].func, config);
 }
 
-module.exports = (config) => {
-  if (checkUrl(['epub.cnipa.gov.cn'])) {
-    return getBasearr(require('./len133-encrypt111.js'), config);
-  }
-  if (checkUrl(['zhaopin.sgcc.com.cn'])) {
-    return getBasearr(require('./len127.js'), config);
-  }
-  if (gv.version === 1) return getBasearr(require('./oldMode1.js'), config);
-  if (gv.version === 2) return getBasearr(require('./oldMode2.js'), config);
-  if (gv.version === 3) return getBasearr(require('./len133-encrypt111.js'), config);
-}
+module.exports.adapts = Object.keys(modMap);
