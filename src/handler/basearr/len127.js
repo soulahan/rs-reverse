@@ -26,7 +26,7 @@ const {
   xor,
 } = parser;
 
-function getBasearr(config) {
+function getBasearr(hostname, config) {
   return numarrJoin(
     3,
     numarrJoin(
@@ -54,7 +54,7 @@ function getBasearr(config) {
         ...numToNumarr4(+ascii2string(gv.keys[19])),
         ...numToNumarr8(Math.floor((config.random || Math.random()) * 1048575) * 4294967296 + (((config.currentTime + 0) & 4294967295) >>> 0)),
         flag,
-        string2ascii("zhaopin.sgcc.com.cn")
+        string2ascii(hostname)
       );
     })(),
     7,

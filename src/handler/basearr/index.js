@@ -2,8 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { numarrEncrypt } = require('../parser/');
 const gv = require('../globalVarible');
-const logger = require('@utils/logger');
-const { simpleDecrypt, simpleEncrypt } = require('@utils/simpleCrypt');
+const { simpleDecrypt, simpleEncrypt, logger } = require('@utils/');
 
 const modMap = fs.readdirSync(__dirname)
   .filter(f => f.endsWith('.js') && f !== 'index.js')
@@ -13,7 +12,7 @@ const modMap = fs.readdirSync(__dirname)
       if (ans[it]) logger.warn(`${it}(${simpleDecrypt(it)})存在重复适配，请检查！`);
       ans[it] = {
         key: it,
-        func: mod,
+        func: mod.bind(null, simpleDecrypt(it)),
       };
     });
     return ans;

@@ -26,7 +26,7 @@ const {
   xor,
 } = parser;
 
-function getBasearr(config) {
+function getBasearr(hostname, config) {
   const getTaskNumber = (name, idx) => gv.r2mka(name).taskarr[idx];
   return numarrJoin(
     3,
