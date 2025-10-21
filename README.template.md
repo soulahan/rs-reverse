@@ -4,7 +4,10 @@
 
 该项目下代码仅用于个人学习、研究或欣赏。通过使用该仓库相关代码产生的风险与仓库代码作者无关！
 
-该项目的研究网站仅做参考，项目不鼓励直接请求该研究网站，算法逆向研究请直接使用`example`目录下的样例文件，如：`node main.js makecookie -m 3`，其中3表示用例3的外层虚拟机代码文件+ts文件。
+该项目的研究网站仅做参考，项目不鼓励直接请求该研究网站，可通过以下两种方式研究：
+
+1。 直接使用`example`目录下的样例文件，如：`node main.js makecookie`，既使用项目默认用例的外层虚拟机代码文件+ts文件。
+2。 使用-j和-f命令指定本地外层虚拟机代码文件+ts文件(可通过makecode -u自动获取)，如：`node main.js makecookie -j ./path/to/main.js -f ./path/to/ts.json`
 
 ## 1. 博客文章
 
@@ -85,12 +88,19 @@ exec子命令用于开发中或者演示时使用。命令示例：
 
 ### 3.1. 网站适配情况
 
-从[Issues:瑞数vmp网站征集](https://github.com/pysunday/rs-reverse/issues/1)中获取。
+从 [Issues:瑞数vmp网站征集](https://github.com/pysunday/rs-reverse/issues/1) 中获取。
 
-名称 | makecode | makecookie | makecode-high | 是否逆向验证
----- | -------- | ---------- | ------------- | --------------
-[epub.cnipa.gov.cn](http://epub.cnipa.gov.cn) | 👌 | 👌 | 👌 | Y
-[zhaopin.sgcc.com.cn](https://zhaopin.sgcc.com.cn/sgcchr/static/home.html) | 👌 | 👌 | 👌 | Y
+**其中cookie可行性验证可执行makecode-high子命令，无报错则可行性验证验证通过。**
+
+名称 | makecode | makecookie | makecode-high
+---- | -------- | ---------- | -------------
+[epub.cnipa.gov.cn](http://epub.cnipa.gov.cn) | 👌 | 👌 | 👌
+[zhaopin.sgcc.com.cn](https://zhaopin.sgcc.com.cn/sgcchr/static/home.html) | 👌 | 👌 | 👌
+[njnu.edu.cn](http://www.njnu.edu.cn/index/tzgg.htm) | 👌 | 👌 | 👌
+
+**备注**：
+
+1. njnu.edu.cn: 直接执行会返回明文，但是添加代理后会返回rs加密密文，可能和请求头参数有关本项目不做探讨，感兴趣可以自行研究。
 
 ### 3.2. 网站适配
 
@@ -107,12 +117,13 @@ Object.assign(getBasearr, {
 });
 ```
 
-参数说明：
+参数说明（非必需项根据项目情况使用）：
 
-1. adapt(必需)：目标网站hostname的数组集合，为减少项目中出现适配网站明文需要通过simpleCrypt加解密处理；
+1. adapt（必需）：目标网站hostname的数组集合，为减少项目中出现适配网站明文需要通过simpleCrypt加解密处理；
 2. lens：标记basearr数组长度；
 3. encryptLens：标记第一层加密后的数组长度，某些网站时间和随机数的不同，会出现错误的结果，程序会多次尝试生成正确的位数；
-4. exmaple：浏览器真实生成的basearr，用于记录和开发对比。
+4. exmaple：浏览器真实生成的basearr，用于记录和开发对比；
+5. hasDebug: 生成内层虚拟机代码是否增加额外的debugger文本, 默认情况下内层虚拟机只会出现两处debugger文本。
 
 **注意：basearr的适配需要开发人员自己逆，不过内容大差不差（适配一个网站大概用时1天）**
 

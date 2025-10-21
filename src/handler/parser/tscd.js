@@ -6,6 +6,7 @@ const numToNumarr4 = require('./common/numToNumarr4');
 const { runTaskByUid } = require('./common/runTask');
 const custask = require('./task');
 const error = require('@utils/error');
+const getLens = require('./common/getLens');
 
 function getValMaps() {
   let uid = gv.ts.cp[3];
@@ -41,6 +42,24 @@ function getTaskarr(arr, idx, ans = {}) {
   return ans;
 }
 
+function genKeys(ans, step = 2) {
+  if (step <= 0) throw new Error('生成keys失败，请检查！')
+  const keys = []
+  for (let i = 0, op = 1, gap; i < ans[0]; i ++) {
+    if (step === 2) {
+      [gap, op] = [ans[op] << 8 | ans[op + 1], op + 2];
+    } else if (step === 1) {
+      [gap, op] = getLens(ans, op);
+    }
+    keys.push(ans.slice(op, op + gap));
+    op += gap;
+  }
+  if ([29, 30, 31, 32].some(key => keys[key].length !== 4)){
+    return genKeys(ans, step - 1);
+  }
+  return keys;
+}
+
 exports.init = function() {
   const cdArr = decrypt(gv.ts.cd);
   const start = 2;
@@ -52,12 +71,6 @@ exports.init = function() {
   const ans = cdArr.slice(end).map((item, idx) => {
     return item ^ offset[idx % 8];
   })
-  const keys = []
-  for (let i = 0, op = 1; i < ans[0]; i ++) {
-    const gap = ans[op++] << 8 | ans[op++];
-    keys.push(ans.slice(op, op + gap));
-    op += gap;
-  }
-  gv._setAttr('keys', keys);
+  gv._setAttr('keys', genKeys(ans));
   logger.debug('$_ts.cd完成解析!')
 };

@@ -1,4 +1,5 @@
-const gv = require('../utils/initGv')();
+const gv = require('../src/handler/globalVarible');
+gv.wrap(require('../utils/initGv'))();
 const { main, swap4, swap2, hexnum, stringReverse, init } = gv.utils;
 
 const valueMap = {

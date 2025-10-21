@@ -58,7 +58,10 @@ function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code
 function firstStep(ts, immucfg, mate, outputResolve) {
   gv._setAttr('_ts', ts);
   const coder = new Coder(ts, immucfg);
-  const { code, $_ts, codemap } = coder.run().genCodemap();
+  const { code, $_ts, codemap } = coder.run({
+    hasCodemap: true,
+    hasDebug: !!gv.config.adapt?.hasDebug,
+  });
   gv.config.codemap = codemap;
   const files = writeFile('first', ts, immucfg, mate, $_ts, code, outputResolve);
   const cookieVal = new Cookie(coder).run();

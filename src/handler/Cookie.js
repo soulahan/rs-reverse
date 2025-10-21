@@ -26,23 +26,25 @@ module.exports = class {
   }
 
   run() {
-    const basearr = getBasearr(this.config)
+    const basearr = getBasearr(this.config, gv);
     logger.info(`basearr【${basearr.length}】: [${basearr}]`)
+    const basearrEncrypt = encryptMode1(
+      xor(
+        numarrEncrypt(basearr),
+        gv.keys[2],
+        16
+      ),
+      numarrAddTime(gv.keys[17], this.config.runTime, this.config.random)[0],
+      0
+    )
     const nextarr = numarrJoin(
       numarrJoin(
         2,
         numToNumarr4([this.config.r2mkaTime, this.config.startTime]),
         gv.keys[2]
       ),
-      encryptMode1(
-        xor(
-          numarrEncrypt(basearr),
-          gv.keys[2],
-          16
-        ),
-        numarrAddTime(gv.keys[17], this.config.runTime, this.config.random)[0],
-        0
-      )
+      gv.config.hostname === 'V1NXTBdcXUwXWlc=' ? basearrEncrypt.length >> 8 & 255 | 128 : undefined,
+      basearrEncrypt,
     )
     return '0' + numarr2string(
       encryptMode1(

@@ -27,7 +27,6 @@ const {
 } = parser;
 
 function getBasearr(hostname, config) {
-  const getTaskNumber = (name, idx) => gv.r2mka(name).taskarr[idx];
   return numarrJoin(
     3,
     numarrJoin(
@@ -42,12 +41,12 @@ function getBasearr(hostname, config) {
       0,
       0,
       ...numToNumarr4(Number(hexnum('3136373737323136'))),
-      ...numToNumarr4(getTaskNumber('0>one>60-197', 56)),
+      ...numToNumarr4(0),
       ...numToNumarr2(config['window.innerHeight']),
       ...numToNumarr2(config['window.innerWidth']),
       ...numToNumarr2(config['window.outerHeight']),
       ...numToNumarr2(config['window.outerWidth']),
-      ...numToNumarr8(getTaskNumber('0>one>60-197', 61)),
+      ...numToNumarr8(0),
     ),
     10,
     (() => {

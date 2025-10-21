@@ -4,6 +4,7 @@ module.exports = {
   ...require('./swap'),
   ...require('./modeEncrypt'),
   ...require('./runTask'),
+  getLens: require('./getLens'),
   main: require('./main'),
   hexnum: require('./hexnum'),
   combine4: require('./combine4'),

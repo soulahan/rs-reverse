@@ -1,4 +1,5 @@
-const gv = require('../utils/initGv')();
+const gv = require('../src/handler/globalVarible');
+gv.wrap(require('../utils/initGv'))();
 const { ascii2string } = gv.utils;
 
 const valueMap = {

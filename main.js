@@ -91,12 +91,16 @@ const commandBuilder = {
 
 const notUrlHanlde = async (config, ts) => {
   if (isValidUrl(ts.from)) {
-    config.hostname = simpleEncrypt(ts.from.split('/')[2], 57);
+    config.url = new URL(ts.from);
+    config.hostname = simpleEncrypt(config.url.hostname.replace(/^www\./, ''));
+    if (adapts[config.hostname]) {
+      config.adapt = adapts[config.hostname];
+    }
     return;
   }
   config.hostname = await inquirerSelect({
     message: '请选择来源数据来源：',
-    choices: adapts.map(it => ({
+    choices: Object.keys(adapts).map(it => ({
       name: simpleDecrypt(it, 57),
       value: it,
     }))
@@ -206,7 +210,7 @@ module.exports = yargs
     (argv) => {
       debugLog(argv.level);
       Math.random = () => 0.1253744220839037;
-      initGv(argv);
+      gv.wrap(initGv)(argv);
       Object.assign(global, gv.utils);
       Object.assign(global, require('@src/handler/viewer/'));
       if (argv.code) {

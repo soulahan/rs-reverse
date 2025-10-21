@@ -130,7 +130,7 @@ function dynamicExec(taskItem, start = 0, args = [], loop_res = {}, global_res =
     if (typeof codemap[task[t_cursor]] !== 'string') {
       logger.error(`codemap中下标${task[t_cursor]}不存在值!`)
     } else {
-      logger.debug(`(${key}, ${idx})执行代码：${codemap[task[t_cursor]]}`);
+      logger.debug(`(${key}, ${idx}, ${task[t_cursor]})执行代码：${codemap[task[t_cursor]]}`);
       eval(`${codemap.forcur}=t_cursor`);
       codemap[task[t_cursor]].split(';').map(it => it.trim()).forEach(c => {
         try {

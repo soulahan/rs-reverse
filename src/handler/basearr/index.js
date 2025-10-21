@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const { numarrEncrypt } = require('../parser/');
-const gv = require('../globalVarible');
-const { simpleDecrypt, simpleEncrypt, logger } = require('@utils/');
+const numarrEncrypt = require('../parser/common/numarrEncrypt');
+const { simpleDecrypt, simpleEncrypt } = require('@utils/simpleCrypt');
+const logger = require('@utils/logger');
 
 const modMap = fs.readdirSync(__dirname)
   .filter(f => f.endsWith('.js') && f !== 'index.js')
@@ -11,6 +11,7 @@ const modMap = fs.readdirSync(__dirname)
     mod.adapt?.forEach(it => {
       if (ans[it]) logger.warn(`${it}(${simpleDecrypt(it)})存在重复适配，请检查！`);
       ans[it] = {
+        ...mod,
         key: it,
         func: mod.bind(null, simpleDecrypt(it)),
       };
@@ -25,7 +26,7 @@ function getBasearr(func, config, deep = 0) {
   return basearr;
 }
 
-module.exports = (config) => {
+module.exports = (config, gv) => {
   const mod = modMap[gv.config.hostname] || modMap[simpleEncrypt(gv.config.hostname)];
   if (mod) {
     logger.debug(`当前已适配，使用【${mod.key}(${simpleDecrypt(mod.key)})】生成basearr`);
@@ -35,4 +36,4 @@ module.exports = (config) => {
   return getBasearr(modMap['XElMWxdaV1BJWBdeVk8XWlc='].func, config);
 }
 
-module.exports.adapts = Object.keys(modMap);
+module.exports.adapts = modMap;

@@ -21,9 +21,14 @@ module.exports = class {
     this.immucfg = immucfg;
     this.functionsNameSort = []; // 存放vm代码中定义的方法，用于计算代码特征码使用
     this.mainFunctionIdx = null; // 主函数（编号为1）在代码中的开始与结束下标
+    this.config = {
+      hasDebug: false, // 是否添加额外的debugger字符串
+      hasCodemap: false, // 是否生成codemap
+    }
   }
 
-  run() {
+  run(config = {}) {
+    Object.assign(this.config, config);
     const codeArr = this.parseGlobalText1();
     codeArr.push(this.parseGlobalText2());
     codeArr.push("})(", '$_ts', ".scj,", '$_ts', ".aebi);");
@@ -35,6 +40,7 @@ module.exports = class {
     this.parseTs(codeStr);
     this.endTime = new Date().getTime();
     this.code = codeStr;
+    if (this.config.hasCodemap) this.codemap = getCodemap(this.code);
     return this;
   }
 
@@ -98,6 +104,7 @@ module.exports = class {
     // 代码段数量
     opmate.setMate('G_code_num', true);
     for (let i = 0; i < opmate.getMateOri('G_code_num'); i++) {
+      if (this.config.hasDebug) this.debuggerScd = this.getDebuggerScd(this.$_ts.nsd);
       this.gren(i, codeArr);
     }
     codeArr.push('}}}}}}}}}}'.substr(opmate.getMateOri('G_code_num') - 1));
@@ -259,6 +266,9 @@ module.exports = class {
     return codeArr;
   }
   grenIfElseAssign(start, codeArr) {
+    if (this.debuggerScd?.()) {
+      codeArr.push('debu', 'gger;');
+    }
     const { opdata, keynames, keycodes } = this;
     const arr = opdata.getData('_$$k')[start];
     const len = arr.length - (arr.length % 2);
@@ -295,6 +305,22 @@ module.exports = class {
         return Object.keys(mateOri).map(key => [key, mateOri[key], mate[key]])
       },
       init,
+    }
+  }
+
+  getDebuggerScd(nsd) {
+    let scd = getScd(nsd);
+    let max = scd() % 10 + 10;
+    return () => {
+      let ret = false;
+      -- max;
+      if (max <= 0) {
+        max = scd() % 10 + 10;
+        if (max < 64) {
+          ret = true;
+        }
+      }
+      return ret;
     }
   }
 }
