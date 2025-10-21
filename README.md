@@ -60,7 +60,7 @@ Examples:
 
 ```bash
 $ npx rs-reverse makecode
-代码还原成功！用时：26ms
+代码还原成功！用时：24ms
 
   原始$_ts：output/makecode/ts.json
   外层虚拟机生成的$_ts：output/makecode/ts-full.json
@@ -70,7 +70,7 @@ $ npx rs-reverse makecode
 
 ```bash
 $ npx rs-reverse makecode -u http://epub.cnipa.gov.cn/
-代码还原成功！用时：28ms
+代码还原成功！用时：24ms
 
   原始$_ts：output/makecode/ts.json
   外层虚拟机生成的$_ts：output/makecode/ts-full.json
@@ -82,7 +82,7 @@ $ npx rs-reverse makecode -u http://epub.cnipa.gov.cn/
 
 ```bash
 $ npx rs-reverse makecode -j ./example/codes/main.js -f ./example/codes/\$_ts.json
-代码还原成功！用时：24ms
+代码还原成功！用时：23ms
 
   原始$_ts：output/makecode/ts.json
   外层虚拟机生成的$_ts：output/makecode/ts-full.json
@@ -129,23 +129,23 @@ Examples:
 
 ```bash
 $ npx rs-reverse makecookie
-成功生成cookie（长度：257），用时：591ms
-cookie值: NOh8RTWx6K2dT=0h3xikav7RSJeF2_S73DePKVv6LKxLfR_HUnjbzYOFua6a7Y5em0Qq36k532OXujq6mqRc9oTzx1R2JrVCbRuRKYH2gXWEJRN_Pdq06ydtibm1JYUk5RVUPY12JBB7yaQ2CSZoCX2qE4TvmtcIHPJP52d54bp4zuWvDNKPUEDZq5K2ECx0KPHsq2aL4r83DHsB1OCLJbJkw2QC65Mh__7SA.vMDOkNa.wqp0GoFBIJ8HeJb0k69wyUN8H0hFqqAkG
+成功生成cookie（长度：257），用时：579ms
+cookie值: NOh8RTWx6K2dT=0PeDJlntn5dcP2ELUT599.OCJZnxhGFftxnDeqN6fkW7whJhEZmrlQxBwUch.01xJ8f544TdpYv0BYzhmHY9wZLEjeJtakOJpranYMLJT1Woy7jTbOid0bgMQvMU1260JFwK999WUzk_rGeqXMp5L9W6hMuuK22Nt3kyXSDaH721qOt_YkD8Ko.4gzCDghgFEZco.s.RL5B9SIRuZfquocP3ZuQIPSyaRczgzgbmSHcNgzx23DdzZwGURPGvKN_cF
 ```
 
 ```bash
-$ npx rs-reverse makecookie -u http://epub.cnipa.gov.cn/
-存在meta-content值：ukjBPUKxpmV93gCXybBD9frLMJA6jeN6I6LhXSPqiJqmOQku.pLENgmaKYxPFcv_
-解析结果：/
+$ npx rs-reverse makecookie -u https://jf.ccb.com/exchangecenter/search/product.jhtml
+存在meta-content值：64ocS81CIy6NI6phEwTieyO8980EsVlcVcv1jXqeR6bPP42.gbMj..t_LPVy7ZicCZPrXhyafmkK5gXzMbUXOAaI17GyXIUVqyaKfikrmL2jfD0YiOqihyTyvznWV1NLUyms0S2xPKSIiJN8aCxlAFVpGz6KKDcBLAZMLE9sX6kQOw8oR_qLDzYn1YaEuRpg
+解析结果：/exchangecenter/search/product.jhtml
 
-成功生成cookie（长度：257），用时：576ms
-cookie值: NOh8RTWx6K2dT=0DnbCqHnGrA0OkwCEExGpdzbM8oDtcdkz0EQ2Hh0lSMJW4FTpNIoITwaK1wJxEWJ7XcZE3S.Gpn0jlaPfMFU2g.yDqHd91GJi3L6OHpnvohMhZaBzBxV6.vD5r_TmLrEDeLphZfLCf9OiRYqlRzuSbQPurCq8SSWh1pAp5VDNb9nN6fWUs4AK50iNrbyUi7nagrJnXwfSqB3_xFKAfBvP8Tlf59X52qktjZSKdHT.7ZL1szDugJijGxUdCSofwt9S;NOh8RTWx6K2dS=60MsaPN1fv0Xp9NMXwA9MjA_oYcnW_xpvpC9JgR63OM7RWXj50E_nzwZDqDYJqsWu.XlfyaR0Z0i22AQ.91ZXNMq;WEB=20111132
+成功生成cookie（长度：257），用时：599ms
+cookie值: u38hCs0hyeaNT=0l.GF9NqWz4tSNBR2WkstEazqYnTYk6BErVRLh7Y7YGeOsrQzemuRc80rEkvyqnUJ2b.At8C6jv2BET20OI4XbL1uSClnOzaFREW7dv_Z5J61Qt6lh5amrXXmPRVKBFWoj_scQOCkemtBC7kuBAEt1nXwW6tRqiG7zOrRg5KVeoQT.dFArfadDKZp62T6Qd1BoCDmodatI2dQEePyPtWaMvU3EKzLiIBfFndDaMud6S9JeU6B3uQoNu60cU6xLUMk;tgw_l7_route=42f24dc776fdeebe5997c9994dfd592a;u38hCs0hyeaNS=60OgKxAsq8SJEm1iM9fsFQ7Od11bNPkGj2XFycpNyFgJNikTQIZlWL78DTW3oVlizCKVXKJTHkWwRFVK_c0xfEpG;ha_safe=safe4
 ```
 
 ```bash
 $ npx rs-reverse makecookie -j ./example/codes/main.js -f ./example/codes/\$_ts.json
-成功生成cookie（长度：257），用时：569ms
-cookie值: NOh8RTWx6K2dT=0sn6dYfkrVpTqxpAdGj9.NJV4r1bZ7NdJr5wYBp8GT7xB3zxGrpMm8KuH7qsjtF9UEwwuB.dFy_ix3_6R6Ms2GzejlK9BZ4biTCuWOWLZc.Dc5.QPAjkH.PjGGWmaQ7D.KS7qiETVCmr3WdzsGVVbbWsGf0T86.o_opGfOJTqPt8D0ZRpOYCP92pSPXFm3f83wT5djvWjKD1BIErYcDWesbnGKzE.M9ViU.bJavAIt_Rb3bHxpa1t2iz.RuW3ULMd
+成功生成cookie（长度：257），用时：626ms
+cookie值: NOh8RTWx6K2dT=028Czqz4Hprb9.mH8rSw95XvCB.IonaX2K84bXaR59lkLwaYmcjkCqDHsFrZvAJQvTcGhH8uqpGhJvwpbaSL3Rv5SMSejnJpfpvxl6YNeetVGYUVN4AhWUo5.3K2AntKRMSI9T7SY3uZzDFk6SovlwWzJrYejrKgK8H2g7fZKduv3QbYb3DadT9gwekWOQeYvzgODCIHRzgyf4RRdqDTTk7u9lV5hCoEG3lSdDrOFdufRHfmL9UR1Vf7MRxrsqnqe
 ```
 
 ### 2.3. makecode-high子命令
@@ -183,7 +183,7 @@ Examples:
 
 ```bash
 $ npx rs-reverse makecode-high -u https://zhaopin.sgcc.com.cn/sgcchr/static/home.html
-代码还原成功！用时：982ms
+代码还原成功！用时：977ms
 
   
 第1次请求保存文件：
@@ -258,6 +258,7 @@ $ npx rs-reverse exec -c '+ascii2string(gv.keys[21])' -j ./example/codes/main.js
 [zhaopin.sgcc.com.cn](https://zhaopin.sgcc.com.cn/sgcchr/static/home.html) | 👌 | 👌 | 👌
 [njnu.edu.cn](http://www.njnu.edu.cn/index/tzgg.htm) | 👌 | 👌 | 👌
 [ems.com.cn](https://www.ems.com.cn/) | 👌 | 👌 | 👌
+[jf.ccb.com](https://jf.ccb.com/exchangecenter/search/product.jhtml) | 👌 | 👌 | 👌
 
 **备注**：
 
@@ -265,16 +266,25 @@ $ npx rs-reverse exec -c '+ascii2string(gv.keys[21])' -j ./example/codes/main.js
 
 ### 3.2. 网站适配
 
-版本1.10+适配只需要增加在目录`src/handler/basearr/`下增加适配文件即可，如文件：[len133-encrypt111.js](https://github.com/pysunday/rs-reverse/blob/main/src/handler/basearr/len133-encrypt111.js)
+版本1.10+适配只需要增加在目录`src/handler/basearr/`下增加适配文件即可，如文件：[len123.js](https://github.com/pysunday/rs-reverse/blob/main/src/handler/basearr/len123.js)
 
 在文件底部需要加入适配信息，如：
 
 ```javascript
 Object.assign(getBasearr, {
-  adapt: ['XElMWxdaV1BJWBdeVk8XWlc='],
-  lens: 133,
-  encryptLens: 111,
-  example: [3,49,1,0,33,128,159,173,0,238,8,77,97,99,73,110,116,101,108,0,0,8,143,52,0,0,0,1,0,0,0,0,0,0,0,3,190,0,150,4,55,6,192,0,0,0,0,0,0,0,0,10,19,1,13,104,186,70,142,242,99,53,20,0,8,94,52,26,35,27,113,4,7,12,1,0,0,0,0,0,0,0,16,21,199,129,0,1,0,6,16,1,0,1,0,1,1,217,155,133,250,238,102,1,0,0,0,2,4,225,224,103,203,9,5,11,100,0,0,0,13,1,0,15,8,7,123,34,107,34,58,49,125]
+  adapt: ["XFRKF1pWVBdaVw==", "U18XWlpbF1pWVA=="],
+  "XFRKF1pWVBdaVw==": {
+    lastWord: 'P',
+    flag: 4114,
+    devUrl: 'UU1NSUoDFhZOTk4XXFRKF1pWVBdaVxY='
+  },
+  "U18XWlpbF1pWVA==": {
+    lastWord: 'T',
+    flag: 4113,
+    devUrl: "UU1NSUoDFhZTXxdaWlsXWlZUFlxBWlFYV15cWlxXTVxLFkpcWEtaURZJS1ZdTFpNF1NRTVRV",
+  },
+  lens: 123,
+  example: [3,49,1,0,33,128,159,173,0,238,8,77,97,99,73,110,116,101,108,0,0,6,74,52,0,0,0,1,0,0,0,0,0,0,0,3,190,0,150,4,55,6,192,0,0,0,0,0,0,0,0,10,19,1,13,104,247,77,223,132,182,40,134,0,8,94,52,6,14,91,114,4,7,12,1,0,0,0,0,0,0,0,16,18,246,60,0,1,0,6,16,1,0,0,0,0,1,127,21,128,139,16,104,13,0,0,0,2,4,181,203,11,102,9,5,11,100,0,0,0,13,1,0]
 });
 ```
 
@@ -285,12 +295,14 @@ Object.assign(getBasearr, {
 1. adapt（必需）：目标网站hostname的数组集合，为减少项目中出现适配网站明文需要通过simpleCrypt加解密处理；
 2. encryptLens：标记第一层加密后的数组长度，某些网站时间和随机数的不同，会出现错误的结果，程序会多次尝试生成正确的位数；
 3. hasDebug: 生成内层虚拟机代码是否增加额外的debugger文本, 默认情况下内层虚拟机只会出现两处debugger文本；
-4. lastWord: 默认字母T，cookie键的最后一个字母，来自`$_ts.cp[0]`，没有找到取值规律，可通过浏览器cookie中查看，已经有T和P的情况。
+4. lastWord: 默认字母T，cookie键的最后一个字母，来自`$_ts.cp[0]`，没有找到取值规律，可通过浏览器cookie中查看，已经有T和P的情况；
+5. flag: 4位数字，每个网站都是不同的的，可能是rs对客户网站的序列号。
 
-协助开发：
+协助开发（实际无使用）：
 
-1. lens（实际无使用）：标记basearr数组长度；
-2. exmaple（实际无使用）：浏览器真实生成的basearr，用于记录和开发对比。
+1. lens：标记basearr数组长度；
+2. exmaple：浏览器真实生成的basearr，用于记录和开发对比；
+3. devUrl: 开发该适配器的目标网站。
 
 **注意：basearr的适配需要开发人员自己逆，不过内容大差不差（适配一个网站大概用时1天）**
 

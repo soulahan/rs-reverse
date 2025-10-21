@@ -27,6 +27,7 @@ const {
 } = parser;
 
 function getBasearr(hostname, config) {
+  if (!gv.config.adapt?.flag) throw new Error('适配器配置项flag值未定义');
   return numarrJoin(
     3,
     numarrJoin(
@@ -64,7 +65,7 @@ function getBasearr(hostname, config) {
     [
       ...numToNumarr4(16777216),
       ...numToNumarr4(0),
-      ...numToNumarr2(4114),
+      ...numToNumarr2(gv.config.adapt.flag),
       ...numToNumarr2(config.codeUid),
     ],
     0,
@@ -102,8 +103,17 @@ function getBasearr(hostname, config) {
 }
 
 Object.assign(getBasearr, {
-  adapt: ['XFRKF1pWVBdaVw=='],
-  lastWord: 'P',
+  adapt: ["XFRKF1pWVBdaVw==", "U18XWlpbF1pWVA=="],
+  "XFRKF1pWVBdaVw==": {
+    lastWord: 'P',
+    flag: 4114,
+    devUrl: 'UU1NSUoDFhZOTk4XXFRKF1pWVBdaVxY='
+  },
+  "U18XWlpbF1pWVA==": {
+    lastWord: 'T',
+    flag: 4113,
+    devUrl: "UU1NSUoDFhZTXxdaWlsXWlZUFlxBWlFYV15cWlxXTVxLFkpcWEtaURZJS1ZdTFpNF1NRTVRV",
+  },
   lens: 123,
   example: [3,49,1,0,33,128,159,173,0,238,8,77,97,99,73,110,116,101,108,0,0,6,74,52,0,0,0,1,0,0,0,0,0,0,0,3,190,0,150,4,55,6,192,0,0,0,0,0,0,0,0,10,19,1,13,104,247,77,223,132,182,40,134,0,8,94,52,6,14,91,114,4,7,12,1,0,0,0,0,0,0,0,16,18,246,60,0,1,0,6,16,1,0,0,0,0,1,127,21,128,139,16,104,13,0,0,0,2,4,181,203,11,102,9,5,11,100,0,0,0,13,1,0]
 });

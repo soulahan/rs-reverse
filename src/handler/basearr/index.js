@@ -12,6 +12,7 @@ const modMap = fs.readdirSync(__dirname)
       if (ans[it]) logger.warn(`${it}(${simpleDecrypt(it)})存在重复适配，请检查！`);
       ans[it] = {
         ...mod,
+        ...(mod[it] || {}),
         key: it,
         func: mod.bind(null, simpleDecrypt(it)),
       };

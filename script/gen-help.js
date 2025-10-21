@@ -30,7 +30,7 @@ const helpMap = {
   makecookieHelp: getHelpCode('makecookie -h'),
   makecookieExample: [
     getHelpCode('makecookie'),
-    getHelpCode('makecookie -u http://epub.cnipa.gov.cn/'),
+    getHelpCode('makecookie -u https://jf.ccb.com/exchangecenter/search/product.jhtml'),
     getHelpCode("makecookie -j ./example/codes/main.js -f ./example/codes/\\$_ts.json"),
   ].join('\n\n'),
 }
