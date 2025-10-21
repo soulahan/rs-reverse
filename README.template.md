@@ -97,6 +97,7 @@ exec子命令用于开发中或者演示时使用。命令示例：
 [epub.cnipa.gov.cn](http://epub.cnipa.gov.cn) | 👌 | 👌 | 👌
 [zhaopin.sgcc.com.cn](https://zhaopin.sgcc.com.cn/sgcchr/static/home.html) | 👌 | 👌 | 👌
 [njnu.edu.cn](http://www.njnu.edu.cn/index/tzgg.htm) | 👌 | 👌 | 👌
+[ems.com.cn](https://www.ems.com.cn/) | 👌 | 👌 | 👌
 
 **备注**：
 
@@ -119,11 +120,17 @@ Object.assign(getBasearr, {
 
 参数说明（非必需项根据项目情况使用）：
 
+实际使用：
+
 1. adapt（必需）：目标网站hostname的数组集合，为减少项目中出现适配网站明文需要通过simpleCrypt加解密处理；
-2. lens：标记basearr数组长度；
-3. encryptLens：标记第一层加密后的数组长度，某些网站时间和随机数的不同，会出现错误的结果，程序会多次尝试生成正确的位数；
-4. exmaple：浏览器真实生成的basearr，用于记录和开发对比；
-5. hasDebug: 生成内层虚拟机代码是否增加额外的debugger文本, 默认情况下内层虚拟机只会出现两处debugger文本。
+2. encryptLens：标记第一层加密后的数组长度，某些网站时间和随机数的不同，会出现错误的结果，程序会多次尝试生成正确的位数；
+3. hasDebug: 生成内层虚拟机代码是否增加额外的debugger文本, 默认情况下内层虚拟机只会出现两处debugger文本；
+4. lastWord: 默认字母T，cookie键的最后一个字母，来自`$_ts.cp[0]`，没有找到取值规律，可通过浏览器cookie中查看，已经有T和P的情况。
+
+协助开发：
+
+1. lens（实际无使用）：标记basearr数组长度；
+2. exmaple（实际无使用）：浏览器真实生成的basearr，用于记录和开发对比。
 
 **注意：basearr的适配需要开发人员自己逆，不过内容大差不差（适配一个网站大概用时1天）**
 

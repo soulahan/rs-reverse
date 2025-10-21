@@ -33,7 +33,7 @@ module.exports = (config, gv) => {
     return getBasearr(mod.func, config);
   }
   logger.debug('默认适配器生成basearr');
-  return getBasearr(modMap['XElMWxdaV1BJWBdeVk8XWlc='].func, config);
+  return getBasearr(modMap['Q1FYVklQVxdKXlpaF1pWVBdaVw=='].func, config);
 }
 
 module.exports.adapts = modMap;

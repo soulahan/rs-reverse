@@ -65,7 +65,7 @@ function firstStep(ts, immucfg, mate, outputResolve) {
   gv.config.codemap = codemap;
   const files = writeFile('first', ts, immucfg, mate, $_ts, code, outputResolve);
   const cookieVal = new Cookie(coder).run();
-  const cookieKey = gv.utils.ascii2string(gv.keys[7]).split(';')[5] + 'T';
+  const cookieKey = gv.utils.ascii2string(gv.keys[7]).split(';')[5] + (gv.config.adapt?.lastWord || 'T');
   return [files, `${cookieKey}=${cookieVal}`];
 }
 
@@ -86,6 +86,7 @@ module.exports = async function (ts, outputResolve) {
   }
   const startTime = new Date().getTime();
   const [files, cookieStr] = firstStep(ts, gv.config.immucfg, mate, outputResolve);
+  logger.debug(`生成cookie：${cookieStr}`);
   files.unshift('\n第1次请求保存文件：\n');
   const result = await getCode(mate.url, cookieStr);
   if (result.statusCode !== 200) throw new Error(`第二次请求返回状态码非200（${result.statusCode}）`);

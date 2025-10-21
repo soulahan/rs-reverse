@@ -64,7 +64,7 @@ function getBasearr(hostname, config) {
     [
       ...numToNumarr4(16777216),
       ...numToNumarr4(0),
-      ...numToNumarr2(4117),
+      ...numToNumarr2(4114),
       ...numToNumarr2(config.codeUid),
     ],
     0,
@@ -98,32 +98,14 @@ function getBasearr(hostname, config) {
     })(),
     13,
     [0],
-    15,
-    (() => {
-      const [key, valstr] = ascii2string(gv.keys[40]).split(':');
-      const val = ((str) => {
-        if (typeof str !== 'string') throw new Error('传入参数非字符串');
-        str = str.replace(/[^A-Za-z0-9\+\/\=]/g, '')
-        if (str.length !== 4) throw new Error('字符长度非4个未做适配');
-        const data = [...str].map(it => gv.alphabet.indexOf(it));
-        const val1 = (data[0] << gv.cp2[54]) | (data[1] >> gv.cp2[13]);
-        const val2 = ((gv.cp2[15] & data[1]) << gv.cp2[13]) | (data[2] >> gv.cp2[54]);
-        const val3 = ((gv.cp2[42] & data[2]) << gv.cp2[45]) | data[3];
-        if (val2 === 4) return val3;
-        throw new Error(`解析${str}j结果中中间值不为二会在数据组装时传回{k:"[E]"}, 当前案例{k:1}为正确值`)
-      })(valstr);
-      const arr = string2ascii(`{"${key}":${val}}`);
-      return [ arr.length , ...arr ];
-    })(),
   )
 }
 
 Object.assign(getBasearr, {
-  adapt: ['XElMWxdaV1BJWBdeVk8XWlc='],
-  lastWord: 'T',
-  lens: 133,
-  encryptLens: 111,
-  example: [3,49,1,0,33,128,159,173,0,238,8,77,97,99,73,110,116,101,108,0,0,8,143,52,0,0,0,1,0,0,0,0,0,0,0,3,190,0,150,4,55,6,192,0,0,0,0,0,0,0,0,10,19,1,13,104,186,70,142,242,99,53,20,0,8,94,52,26,35,27,113,4,7,12,1,0,0,0,0,0,0,0,16,21,199,129,0,1,0,6,16,1,0,1,0,1,1,217,155,133,250,238,102,1,0,0,0,2,4,225,224,103,203,9,5,11,100,0,0,0,13,1,0,15,8,7,123,34,107,34,58,49,125]
+  adapt: ['XFRKF1pWVBdaVw=='],
+  lastWord: 'P',
+  lens: 123,
+  example: [3,49,1,0,33,128,159,173,0,238,8,77,97,99,73,110,116,101,108,0,0,6,74,52,0,0,0,1,0,0,0,0,0,0,0,3,190,0,150,4,55,6,192,0,0,0,0,0,0,0,0,10,19,1,13,104,247,77,223,132,182,40,134,0,8,94,52,6,14,91,114,4,7,12,1,0,0,0,0,0,0,0,16,18,246,60,0,1,0,6,16,1,0,0,0,0,1,127,21,128,139,16,104,13,0,0,0,2,4,181,203,11,102,9,5,11,100,0,0,0,13,1,0]
 });
 
 module.exports = getBasearr;
