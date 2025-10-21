@@ -1,5 +1,12 @@
 
 
+## [1.11.0](https://github.com/pysunday/rs-reverse/compare/1.10.1...1.11.0) (2025-10-21)
+
+
+### Features
+
+* 新增适配V1NXTBdcXUwXWlc= ([74d427b](https://github.com/pysunday/rs-reverse/commit/74d427bfc68fe88e27612cced8f238f81241431f))
+
 ## [1.10.1](https://github.com/pysunday/rs-reverse/compare/1.10.0...1.10.1) (2025-10-18)
 
 ## [1.10.0](https://github.com/pysunday/rs-reverse/compare/1.8.1...1.10.0) (2025-10-16)
