@@ -43,7 +43,7 @@ module.exports = class {
         numToNumarr4([this.config.r2mkaTime, this.config.startTime]),
         gv.keys[2]
       ),
-      gv.config.hostname === 'V1NXTBdcXUwXWlc=' ? basearrEncrypt.length >> 8 & 255 | 128 : undefined,
+      gv.config.adapt?.hasDebug ? basearrEncrypt.length >> 8 & 255 | 128 : undefined,
       basearrEncrypt,
     )
     return '0' + numarr2string(

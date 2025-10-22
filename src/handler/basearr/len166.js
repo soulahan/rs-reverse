@@ -36,7 +36,7 @@ function getBasearr(hostname, config) {
       128,
       ...numToNumarr4(uuid(config['window.navigator.userAgent'])),
       string2ascii(config['window.navigator.platform']),
-      ...numToNumarr4(0),
+      ...numToNumarr4(config.execNumberByTime),
       ...execRandomByNumber(98, config.random),
       0,
       0,
@@ -70,7 +70,7 @@ function getBasearr(hostname, config) {
     [
       ...numToNumarr4(16777216),
       ...numToNumarr4(0),
-      ...numToNumarr2(2833),
+      ...numToNumarr2(2830),
       ...numToNumarr2(config.codeUid),
     ],
     0,
@@ -108,14 +108,15 @@ function getBasearr(hostname, config) {
 }
 
 Object.assign(getBasearr, {
-  adapt: ['V1NXTBdcXUwXWlc='],
-  "V1NXTBdcXUwXWlc=": {
+  adapt: ["WkxKTVZUShdeVk8XWlc="],
+  "WkxKTVZUShdeVk8XWlc=": {
     hasDebug: true,
     lastWord: 'T',
-    devUrl: 'UU1NSQMWFk5OThdXU1dMF1xdTBdaVxZQV11cQRZNQ15eF1FNVA==',
-  },
-  lens: 163,
-  example: [3,73,1,0,33,128,159,173,0,238,8,77,97,99,73,110,116,101,108,0,0,0,0,52,0,0,0,1,0,0,0,0,0,0,0,3,190,0,150,4,55,6,192,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,134,114,141,226,0,0,0,0,0,0,0,0,0,0,0,0,10,35,3,13,104,241,112,91,1,38,107,241,0,8,94,52,239,251,121,142,4,15,119,119,119,46,110,106,110,117,46,101,100,117,46,99,110,7,12,1,0,0,0,0,0,0,0,11,17,162,137,0,1,0,6,16,1,0,0,0,0,1,254,82,107,59,81,104,1,0,0,0,2,4,102,103,203,101,9,5,11,100,0,0,0,13,1,0]
+    devUrl: 'UU1NSQMWFk5OThdaTEpNVlRKF15WTxdaVxY=',
+    flag: 2830,
+    lens: 166,
+    example: [3,73,1,0,33,128,159,173,0,238,8,77,97,99,73,110,116,101,108,0,0,6,105,52,0,0,0,1,0,0,0,0,0,0,0,3,190,0,150,4,55,6,192,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,121,211,210,212,0,0,0,0,0,0,0,0,0,0,0,0,10,38,3,13,104,248,74,132,1,113,218,109,0,8,94,52,9,231,188,186,4,18,119,119,119,46,99,117,115,116,111,109,115,46,103,111,118,46,99,110,7,12,1,0,0,0,0,0,0,0,11,14,235,83,0,1,0,6,16,1,0,0,0,0,1,81,58,52,41,138,104,1,0,0,0,2,4,102,11,203,181,9,5,11,100,0,0,0,13,1,0]
+  }
 });
 
 module.exports = getBasearr;

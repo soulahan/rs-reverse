@@ -99,6 +99,8 @@ exec子命令用于开发中或者演示时使用。命令示例：
 [njnu.edu.cn](http://www.njnu.edu.cn/index/tzgg.htm) | 👌 | 👌 | 👌
 [ems.com.cn](https://www.ems.com.cn/) | 👌 | 👌 | 👌
 [jf.ccb.com](https://jf.ccb.com/exchangecenter/search/product.jhtml) | 👌 | 👌 | 👌
+[customs.gov.cn](http://www.customs.gov.cn/) | 👌 | 👌 | 👌
+[fangdi.com.cn](https://www.fangdi.com.cn/) | 👌 | 👌 | 👌
 
 **备注**：
 

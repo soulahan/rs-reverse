@@ -36,7 +36,7 @@ function getBasearr(hostname, config) {
       128,
       ...numToNumarr4(uuid(config['window.navigator.userAgent'])),
       string2ascii(config['window.navigator.platform']),
-      ...numToNumarr4(0),
+      ...numToNumarr4(config.execNumberByTime),
       ...execRandomByNumber(98, config.random),
       0,
       0,
@@ -51,7 +51,6 @@ function getBasearr(hostname, config) {
       ...numToNumarr4(0),
       ...numToNumarr4(uuid(gv.config.url.pathname.toUpperCase())),
       ...numToNumarr4(0),
-      ...numToNumarr8(0),
     ),
     10,
     (() => {
@@ -70,7 +69,7 @@ function getBasearr(hostname, config) {
     [
       ...numToNumarr4(16777216),
       ...numToNumarr4(0),
-      ...numToNumarr2(2833),
+      ...numToNumarr2(3855),
       ...numToNumarr2(config.codeUid),
     ],
     0,
@@ -108,14 +107,14 @@ function getBasearr(hostname, config) {
 }
 
 Object.assign(getBasearr, {
-  adapt: ['V1NXTBdcXUwXWlc='],
-  "V1NXTBdcXUwXWlc=": {
+  adapt: ['X1hXXl1QF1pWVBdaVw=='],
+  "X1hXXl1QF1pWVBdaVw==": {
     hasDebug: true,
-    lastWord: 'T',
-    devUrl: 'UU1NSQMWFk5OThdXU1dMF1xdTBdaVxZQV11cQRZNQ15eF1FNVA==',
+    lastWord: 'P',
+    devUrl: 'UU1NSUoDFhZOTk4XX1hXXl1QF1pWVBdaVxY=',
   },
-  lens: 163,
-  example: [3,73,1,0,33,128,159,173,0,238,8,77,97,99,73,110,116,101,108,0,0,0,0,52,0,0,0,1,0,0,0,0,0,0,0,3,190,0,150,4,55,6,192,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,134,114,141,226,0,0,0,0,0,0,0,0,0,0,0,0,10,35,3,13,104,241,112,91,1,38,107,241,0,8,94,52,239,251,121,142,4,15,119,119,119,46,110,106,110,117,46,101,100,117,46,99,110,7,12,1,0,0,0,0,0,0,0,11,17,162,137,0,1,0,6,16,1,0,0,0,0,1,254,82,107,59,81,104,1,0,0,0,2,4,102,103,203,101,9,5,11,100,0,0,0,13,1,0]
+  lens: 157,
+  example: [3,65,1,0,33,128,159,173,0,238,8,77,97,99,73,110,116,101,108,0,0,3,130,52,0,0,0,1,0,0,0,0,0,0,0,3,190,0,150,4,55,6,192,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,121,211,210,212,0,0,0,0,10,37,3,13,104,247,213,42,184,191,123,197,0,8,94,52,9,196,150,61,4,15,119,119,119,46,102,97,110,103,100,105,46,99,111,109,46,99,110,7,12,1,0,0,0,0,0,0,0,15,15,222,56,0,1,0,6,16,1,0,0,0,0,1,131,138,20,183,16,103,1,0,0,0,2,4,203,11,181,102,9,5,11,100,0,0,0,13,1,0]
 });
 
 module.exports = getBasearr;
