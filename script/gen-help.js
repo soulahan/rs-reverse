@@ -20,7 +20,7 @@ const helpMap = {
   makecodeHelp: getHelpCode('makecode -h'),
   makecodeExample: [
     getHelpCode('makecode'),
-    getHelpCode('makecode -u http://epub.cnipa.gov.cn/'),
+    getHelpCode('makecode -u https://www.riversecurity.com/'),
     getHelpCode("makecode -j ./example/codes/main.js -f ./example/codes/\\$_ts.json"),
   ].join('\n\n'),
   makecodeHighHelp: getHelpCode('makecode-high -h'),

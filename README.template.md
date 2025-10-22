@@ -94,6 +94,7 @@ exec子命令用于开发中或者演示时使用。命令示例：
 
 名称 | makecode | makecookie | makecode-high
 ---- | -------- | ---------- | -------------
+[riversecurity.com](https://www.riversecurity.com/) | 👌 | 👌 | 👌
 [epub.cnipa.gov.cn](http://epub.cnipa.gov.cn) | 👌 | 👌 | 👌
 [zhaopin.sgcc.com.cn](https://zhaopin.sgcc.com.cn/sgcchr/static/home.html) | 👌 | 👌 | 👌
 [njnu.edu.cn](http://www.njnu.edu.cn/index/tzgg.htm) | 👌 | 👌 | 👌
@@ -101,6 +102,7 @@ exec子命令用于开发中或者演示时使用。命令示例：
 [jf.ccb.com](https://jf.ccb.com/exchangecenter/search/product.jhtml) | 👌 | 👌 | 👌
 [customs.gov.cn](http://www.customs.gov.cn/) | 👌 | 👌 | 👌
 [fangdi.com.cn](https://www.fangdi.com.cn/) | 👌 | 👌 | 👌
+[nmpa.gov.cn](https://www.nmpa.gov.cn/xxgk/ggtg/index.html) | 👌 | 👌 | 👌
 
 **备注**：
 

@@ -60,7 +60,7 @@ Examples:
 
 ```bash
 $ npx rs-reverse makecode
-代码还原成功！用时：24ms
+代码还原成功！用时：21ms
 
   原始$_ts：output/makecode/ts.json
   外层虚拟机生成的$_ts：output/makecode/ts-full.json
@@ -69,20 +69,20 @@ $ npx rs-reverse makecode
 ```
 
 ```bash
-$ npx rs-reverse makecode -u http://epub.cnipa.gov.cn/
-代码还原成功！用时：24ms
+$ npx rs-reverse makecode -u https://www.riversecurity.com/
+代码还原成功！用时：19ms
 
   原始$_ts：output/makecode/ts.json
   外层虚拟机生成的$_ts：output/makecode/ts-full.json
   静态文本：output/makecode/immucfg.json
   html代码：output/makecode/index.html
-  外层虚拟机代码：output/makecode/2h9AIDg9eZgY.b4c45da.js
-  内层虚拟机代码：output/makecode/2h9AIDg9eZgY.b4c45da-dynamic.js
+  外层虚拟机代码：output/makecode/ctqNgbzk9niG.294cc83.js
+  内层虚拟机代码：output/makecode/ctqNgbzk9niG.294cc83-dynamic.js
 ```
 
 ```bash
 $ npx rs-reverse makecode -j ./example/codes/main.js -f ./example/codes/\$_ts.json
-代码还原成功！用时：23ms
+代码还原成功！用时：20ms
 
   原始$_ts：output/makecode/ts.json
   外层虚拟机生成的$_ts：output/makecode/ts-full.json
@@ -129,23 +129,23 @@ Examples:
 
 ```bash
 $ npx rs-reverse makecookie
-成功生成cookie（长度：257），用时：579ms
-cookie值: NOh8RTWx6K2dT=0PeDJlntn5dcP2ELUT599.OCJZnxhGFftxnDeqN6fkW7whJhEZmrlQxBwUch.01xJ8f544TdpYv0BYzhmHY9wZLEjeJtakOJpranYMLJT1Woy7jTbOid0bgMQvMU1260JFwK999WUzk_rGeqXMp5L9W6hMuuK22Nt3kyXSDaH721qOt_YkD8Ko.4gzCDghgFEZco.s.RL5B9SIRuZfquocP3ZuQIPSyaRczgzgbmSHcNgzx23DdzZwGURPGvKN_cF
+成功生成cookie（长度：257），用时：496ms
+cookie值: NOh8RTWx6K2dT=0aVFQWz9TfBZEx_EGQe8fpVBBOkDIQGjOpbzYQIWlwicb3GLeojY7FT_iq0fqpSVIt._yUpsnu2h9jX1copSnJWwcqwMW7awhErC.OWPMB6H1j.0hGxOLsPpvf7rrhaSNTowR.IKzW8ZldpXsThD69So3MEQ7_qbc99iyczvsp5l4_gOxdq1s43qOdp7OOHxj86WrZjCDljtGJexbDZc2ug_yAH_PHZSIX4XSFwoLd0MB4MMAVjA1.BhA4OXk2cM2
 ```
 
 ```bash
 $ npx rs-reverse makecookie -u https://jf.ccb.com/exchangecenter/search/product.jhtml
-存在meta-content值：64ocS81CIy6NI6phEwTieyO8980EsVlcVcv1jXqeR6bPP42.gbMj..t_LPVy7ZicCZPrXhyafmkK5gXzMbUXOAaI17GyXIUVqyaKfikrmL2jfD0YiOqihyTyvznWV1NLUyms0S2xPKSIiJN8aCxlAFVpGz6KKDcBLAZMLE9sX6kQOw8oR_qLDzYn1YaEuRpg
+存在meta-content值：iUSEadR917H0IwDh4a4WcTejHWXFPmaoOoVNOFwRSiiy6gPRGwPtMp0BmDB_tzg2jXkJpxv96xBH8HtpR.VHg7KNH1Yl1uu98Je4S5F2qx.rvDHtMloL0ODjlHlWKYRckcjD6DCKZZlCSo.3bN_17kWofwb6O7E6TitmHvRDDVlfG8s84V6E9U5ee6rqRKcA
 解析结果：/exchangecenter/search/product.jhtml
 
-成功生成cookie（长度：257），用时：599ms
-cookie值: u38hCs0hyeaNT=0l.GF9NqWz4tSNBR2WkstEazqYnTYk6BErVRLh7Y7YGeOsrQzemuRc80rEkvyqnUJ2b.At8C6jv2BET20OI4XbL1uSClnOzaFREW7dv_Z5J61Qt6lh5amrXXmPRVKBFWoj_scQOCkemtBC7kuBAEt1nXwW6tRqiG7zOrRg5KVeoQT.dFArfadDKZp62T6Qd1BoCDmodatI2dQEePyPtWaMvU3EKzLiIBfFndDaMud6S9JeU6B3uQoNu60cU6xLUMk;tgw_l7_route=42f24dc776fdeebe5997c9994dfd592a;u38hCs0hyeaNS=60OgKxAsq8SJEm1iM9fsFQ7Od11bNPkGj2XFycpNyFgJNikTQIZlWL78DTW3oVlizCKVXKJTHkWwRFVK_c0xfEpG;ha_safe=safe4
+成功生成cookie（长度：257），用时：498ms
+cookie值: u38hCs0hyeaNT=0CXtVHsUPIkbtEcMxPgyGFrfBVdiqEWlgRXOpT4mpT4XV2Ai6tBbuqVxsFuaYTFanjpoXmq4KPDDFYhMd0FXh_mg5sZbeAvqVVeWYBClfGnDDN3LeiDrNj4QPcEqV657iJyo.TkgoQe.KnOyVO1DTJm9vUQXiRfVfQeXOgEf6kZ8vQ80Qm8FFyh3mrzxQR_RVzHHGxKXL80BcCwLMk5j6ykggqdlHenHCXNhMP39pSc4Qq6z.M6fnjAg6KdcjhYoh;tgw_l7_route=af7e78e331df87effb5218d9d47da852;u38hCs0hyeaNS=60wuK2WB3cWMZ03TG3a4jWTMBbCLU3ag2yOBHOKE9qGEbHZewERNaCuthacV8CU9Aa_exeK1SF.SWa86KVtpCUFq;ha_safe=safe4
 ```
 
 ```bash
 $ npx rs-reverse makecookie -j ./example/codes/main.js -f ./example/codes/\$_ts.json
-成功生成cookie（长度：257），用时：626ms
-cookie值: NOh8RTWx6K2dT=028Czqz4Hprb9.mH8rSw95XvCB.IonaX2K84bXaR59lkLwaYmcjkCqDHsFrZvAJQvTcGhH8uqpGhJvwpbaSL3Rv5SMSejnJpfpvxl6YNeetVGYUVN4AhWUo5.3K2AntKRMSI9T7SY3uZzDFk6SovlwWzJrYejrKgK8H2g7fZKduv3QbYb3DadT9gwekWOQeYvzgODCIHRzgyf4RRdqDTTk7u9lV5hCoEG3lSdDrOFdufRHfmL9UR1Vf7MRxrsqnqe
+成功生成cookie（长度：257），用时：495ms
+cookie值: NOh8RTWx6K2dT=0N1DdbobY1CJfR4T4Sbm4BoZWVVllqPQCy.SZOcRkg5YjfxXjYWeZNgIgul5vNJWVwubBSYiCDlxx8JIiaI2hhjEGBcHmYC21aSc_5B2nYouHb2Y7AXGkdlWO2N_rCq6p3fYsBPLino7fgSrKCWUlmw.GTH0OPM9kHnAXMEe.RN3Y75vh9FKAWFfcZq82ZABuNUhjweKmZj19reEvet3wG2tl.rRlkg4zsGajxWJwTHAsenU6uYynnv6N.Kp8p5gH
 ```
 
 ### 2.3. makecode-high子命令
@@ -183,7 +183,7 @@ Examples:
 
 ```bash
 $ npx rs-reverse makecode-high -u https://zhaopin.sgcc.com.cn/sgcchr/static/home.html
-代码还原成功！用时：977ms
+代码还原成功！用时：871ms
 
   
 第1次请求保存文件：
@@ -254,6 +254,7 @@ $ npx rs-reverse exec -c '+ascii2string(gv.keys[21])' -j ./example/codes/main.js
 
 名称 | makecode | makecookie | makecode-high
 ---- | -------- | ---------- | -------------
+[riversecurity.com](https://www.riversecurity.com/) | 👌 | 👌 | 👌
 [epub.cnipa.gov.cn](http://epub.cnipa.gov.cn) | 👌 | 👌 | 👌
 [zhaopin.sgcc.com.cn](https://zhaopin.sgcc.com.cn/sgcchr/static/home.html) | 👌 | 👌 | 👌
 [njnu.edu.cn](http://www.njnu.edu.cn/index/tzgg.htm) | 👌 | 👌 | 👌
@@ -261,6 +262,7 @@ $ npx rs-reverse exec -c '+ascii2string(gv.keys[21])' -j ./example/codes/main.js
 [jf.ccb.com](https://jf.ccb.com/exchangecenter/search/product.jhtml) | 👌 | 👌 | 👌
 [customs.gov.cn](http://www.customs.gov.cn/) | 👌 | 👌 | 👌
 [fangdi.com.cn](https://www.fangdi.com.cn/) | 👌 | 👌 | 👌
+[nmpa.gov.cn](https://www.nmpa.gov.cn/xxgk/ggtg/index.html) | 👌 | 👌 | 👌
 
 **备注**：
 
