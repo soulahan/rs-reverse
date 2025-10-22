@@ -1,5 +1,12 @@
 
 
+## [1.14.0](https://github.com/pysunday/rs-reverse/compare/1.13.0...1.14.0) (2025-10-22)
+
+
+### Features
+
+* 适配WkxKTVZUShdeVk8XWlc=和X1hXXl1QF1pWVBdaVw== ([de67172](https://github.com/pysunday/rs-reverse/commit/de671722f11c5834f232f6bcec025a019e26a3b5))
+
 ## [1.13.0](https://github.com/pysunday/rs-reverse/compare/1.12.0...1.13.0) (2025-10-21)
 
 
