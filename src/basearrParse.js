@@ -149,15 +149,16 @@ function parse_133(basearr) {
 
 function parseOther(basearr) {
   let oper = 0, len, div;
-  [3, 10, 7, 0, 6, 2, 9, 13].forEach(it => {
+  const divarr = [3, 10, 7, 0, 6, 2, 9, 13];
+  do {
     div = basearr[oper++];
-    if (div !== it) return;
+    if (!divarr.includes(div)) return;
     console.log(`\n【${div}】------start------【${oper - 1}】`);
     len = basearr[oper];
     console.log('  长度:', basearr[oper++]);
     console.log('  ', JSON.stringify(basearr.slice(oper, oper + len)));
     oper += len;
-  })
+  } while (oper < basearr.length);
   console.log(`\n当前游标：${oper}, 数组长度：${basearr.length}`);
 }
 

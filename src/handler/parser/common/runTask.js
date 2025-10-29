@@ -42,7 +42,7 @@ function runTask(task, args, allowTask) {
           }
         }
         if (gv.config.offsetConst[key]) return gv.config.offsetConst[key];
-        if (task.key === '0>one>22-24') {
+        if (task.uid === "U14124020") {
           const idx = parseInt(key);
           Object.assign(gv.config.offsetConst, { [idx]: 3, [idx + 1]: 51, [idx + 2]: 153 });
           return gv.config.offsetConst[key];
