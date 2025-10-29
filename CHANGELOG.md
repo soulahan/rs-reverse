@@ -1,5 +1,12 @@
 
 
+## [1.15.1](https://github.com/pysunday/rs-reverse/compare/1.15.0...1.15.1) (2025-10-29)
+
+
+### Bug Fixes
+
+* 1. 定位任务报错问题修复;2. basearr命令优化 ([bde7b82](https://github.com/pysunday/rs-reverse/commit/bde7b829fd17176169e9209d57b992a2fddebe0b))
+
 ## [1.15.0](https://github.com/pysunday/rs-reverse/compare/1.14.0...1.15.0) (2025-10-22)
 
 
