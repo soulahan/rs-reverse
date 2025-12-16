@@ -9,6 +9,8 @@
 1. 直接使用`example`目录下的样例文件，如：`node main.js makecookie`，既使用项目默认用例的外层虚拟机代码文件+ts文件。
 2. 使用-j和-f命令指定本地外层虚拟机代码文件+ts文件(可通过makecode -u自动获取)，如：`node main.js makecookie -j ./path/to/main.js -f ./path/to/ts.json`
 
+注意：如果目标网站带额外debugger，且basearr中没有做适配，请确认-f对应配置文件是否存在hasDebug配置项，如不存在可手动添加或者执行makecode命令自动生成。
+
 ## 1. 博客文章
 
 1. [瑞数vmp-代码格式化后无法正常运行原因分析](https://blog.howduudu.tech/article/420dc80bfb66280ddbb93d87864cadd1/)

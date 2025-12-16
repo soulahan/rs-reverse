@@ -23,7 +23,7 @@ module.exports = class {
     this.mainFunctionIdx = null; // 主函数（编号为1）在代码中的开始与结束下标
     this.config = {
       hasDebug: !!ts.hasDebug, // 是否添加额外的debugger字符串
-      hasCodemap: false, // 是否生成codemap
+      hasCodemap: !!ts.hasCodemap, // 是否生成codemap
     }
     this.code = ''; // 原始代码
     this.codePure = ''; // 去除干扰debugger的纯净代码
@@ -31,8 +31,7 @@ module.exports = class {
     this.debuggerPosi = undefined; // 用于存储干扰debugger在生成数组中的实际下标
   }
 
-  run(config = {}) {
-    Object.assign(this.config, config);
+  run() {
     const codeArr = this.parseGlobalText1();
     codeArr.push(this.parseGlobalText2());
     codeArr.push("})(", '$_ts', ".scj,", '$_ts', ".aebi);");

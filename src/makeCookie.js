@@ -30,11 +30,12 @@ module.exports = function (ts, outputResolve) {
   gv._setAttr('_ts', ts);
   // if (immucfg) writefile(ts, immucfg, outputResolve);
   const startTime = new Date().getTime();
-  const coder = new Coder(ts, gv.config.immucfg);
-  const { code, $_ts, codemap } = coder.run({
+  const coder = new Coder({
     hasCodemap: true,
     hasDebug: !!gv.config.adapt?.hasDebug,
-  });
+    ...ts,
+  }, gv.config.immucfg);
+  const { code, $_ts, codemap } = coder.run();
   gv.config.codemap = codemap;
   const cookie = new Cookie(coder).run();
   gv.metaContent?.forEach(({content, value}) => {
