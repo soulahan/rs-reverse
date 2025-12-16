@@ -1,5 +1,12 @@
 
 
+## [1.16.1](https://github.com/pysunday/rs-reverse/compare/1.16.0...1.16.1) (2025-12-16)
+
+
+### Bug Fixes
+
+* hasDebug优先级调整，-f命令优先级大于basearr优先级 ([d66a301](https://github.com/pysunday/rs-reverse/commit/d66a301984444a20d771f3d1f6d4eef34b980ad5))
+
 ## [1.16.0](https://github.com/pysunday/rs-reverse/compare/1.15.1...1.16.0) (2025-12-16)
 
 
