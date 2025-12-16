@@ -1,5 +1,12 @@
 
 
+## [1.16.0](https://github.com/pysunday/rs-reverse/compare/1.15.1...1.16.0) (2025-12-16)
+
+
+### Features
+
+* 额外debugger版本适配，url形式会自动判断，本地形式通过-f文件内配置，与basearr配置项hasDebug同效 ([ae983c6](https://github.com/pysunday/rs-reverse/commit/ae983c68a3519bc3eae7671584cca330c072679c))
+
 ## [1.15.1](https://github.com/pysunday/rs-reverse/compare/1.15.0...1.15.1) (2025-10-29)
 
 
