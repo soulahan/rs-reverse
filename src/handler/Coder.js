@@ -22,9 +22,13 @@ module.exports = class {
     this.functionsNameSort = []; // 存放vm代码中定义的方法，用于计算代码特征码使用
     this.mainFunctionIdx = null; // 主函数（编号为1）在代码中的开始与结束下标
     this.config = {
-      hasDebug: false, // 是否添加额外的debugger字符串
+      hasDebug: !!ts.hasDebug, // 是否添加额外的debugger字符串
       hasCodemap: false, // 是否生成codemap
     }
+    this.code = ''; // 原始代码
+    this.codePure = ''; // 去除干扰debugger的纯净代码
+    this.debuggerScd = undefined; // 用于迭代判断坐标是否需要加入干扰debugger
+    this.debuggerPosi = undefined; // 用于存储干扰debugger在生成数组中的实际下标
   }
 
   run(config = {}) {
@@ -32,14 +36,17 @@ module.exports = class {
     const codeArr = this.parseGlobalText1();
     codeArr.push(this.parseGlobalText2());
     codeArr.push("})(", '$_ts', ".scj,", '$_ts', ".aebi);");
-    const codeStr = codeArr.join('');
-    if (!this.immucfg.globalText3) {
-      const subStr = `r2mKa${codeStr.includes('r2mKa0') ? '0' : '1'}`;
-      this.immucfg.globalText3 = findFullString(codeStr, subStr);
+    for (let i = 0; i < codeArr.length; i++) {
+      this.code += codeArr[i];
+      if (!this.debuggerPosi || this.debuggerPosi.includes(i)) continue;
+      this.codePure += codeArr[i];
     }
-    this.parseTs(codeStr);
+    if (!this.immucfg.globalText3) {
+      const subStr = `r2mKa${this.code.includes('r2mKa0') ? '0' : '1'}`;
+      this.immucfg.globalText3 = findFullString(this.code, subStr);
+    }
+    this.parseTs(this.code);
     this.endTime = new Date().getTime();
-    this.code = codeStr;
     if (this.config.hasCodemap) this.codemap = getCodemap(this.code);
     return this;
   }
@@ -104,7 +111,9 @@ module.exports = class {
     // 代码段数量
     opmate.setMate('G_code_num', true);
     for (let i = 0; i < opmate.getMateOri('G_code_num'); i++) {
-      if (this.config.hasDebug) this.debuggerScd = this.getDebuggerScd(this.$_ts.nsd);
+      if (this.config.hasDebug) {
+        [this.debuggerScd, this.debuggerPosi] = this.getDebuggerScd(this.$_ts.nsd, this.debuggerPosi);
+      }
       this.gren(i, codeArr);
     }
     codeArr.push('}}}}}}}}}}'.substr(opmate.getMateOri('G_code_num') - 1));
@@ -192,8 +201,7 @@ module.exports = class {
     } catch(err) {
       logger.error('排序函数生成失败，会影响cookie生成！');
     }
-    const codelist = this.grenIfelse(0, opmate.getMateOri('_$bf'), []);
-    codeArr.push(...codelist);
+    this.grenIfelse(0, opmate.getMateOri('_$bf'), codeArr);
     codeArr.push("}else ", ';', '}');
   }
 
@@ -266,8 +274,8 @@ module.exports = class {
     return codeArr;
   }
   grenIfElseAssign(start, codeArr) {
-    if (this.debuggerScd?.()) {
-      codeArr.push('debu', 'gger;');
+    if (this.debuggerScd?.(codeArr.length)) {
+      codeArr.push('debugger;');
     }
     const { opdata, keynames, keycodes } = this;
     const arr = opdata.getData('_$$k')[start];
@@ -308,20 +316,21 @@ module.exports = class {
     }
   }
 
-  getDebuggerScd(nsd) {
+  getDebuggerScd(nsd, posis = []) {
     let scd = getScd(nsd);
     let max = scd() % 10 + 10;
-    return () => {
+    return [(posi) => {
       let ret = false;
       -- max;
       if (max <= 0) {
         max = scd() % 10 + 10;
         if (max < 64) {
           ret = true;
+          posis.push(posi);
         }
       }
       return ret;
-    }
+    }, posis]
   }
 }
 

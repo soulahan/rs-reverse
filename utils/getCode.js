@@ -1,4 +1,6 @@
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+process.env.OPENSSL_LEGACY_RENEGOTIATION = "1";
+
 const { request, cookieJar } = require('./request');
 const cheerio = require('cheerio');
 const isValidUrl = require('./isValidUrl');
@@ -67,7 +69,12 @@ async function getCodeByHtml(url, cookieStr) {
   }
   await getCodeByJs(remotes.map(it => urlresolve(url, it)), ret);
   logger.info(`网络请求用时：${Date.now() - start} ms`);
-  if (ret.jscode) return ret;
+  if (ret.jscode) {
+    if (ret.jscode.code.includes('push("gger;")')) {
+      ret.$_ts.hasDebug = true;
+    }
+    return ret;
+  }
   throw new Error('js外链中没有瑞数的代码文件');
 }
 

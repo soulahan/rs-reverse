@@ -33,7 +33,7 @@ function debugLog(level) {
 const commandBuilder = {
   f: {
     alias: 'file',
-    describe: '含有nsd, cd值的json文件',
+    describe: '含有nsd, cd值的json文件, 额外配置项：from（来源）、hasDebug（额外debugger）',
     type: 'string',
     coerce: (input) => {
       input = paths.resolveCwd(input);

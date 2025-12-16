@@ -149,7 +149,7 @@ function parse_133(basearr) {
 
 function parseOther(basearr) {
   let oper = 0, len, div;
-  const divarr = [3, 10, 7, 0, 6, 2, 9, 13];
+  const divarr = [3, 10, 7, 0, 6, 2, 9, 13, 4, 16, 1, 15];
   do {
     div = basearr[oper++];
     if (!divarr.includes(div)) return;

@@ -20,7 +20,7 @@ function filenameAddDesc(name, desc) {
   return arr.join('.');
 }
 
-function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code, outputResolve) {
+function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code, codePure, outputResolve) {
   const files = [
     {
       name: 'ts.json',
@@ -44,6 +44,11 @@ function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code
       desc: `内层虚拟机代码：`,
       text: '// 该行标记来源，非动态代码生成: ' + JSON.stringify(ts) + '\n\n' + code,
     },
+    codePure && {
+      name: jscode ? filenameAddDesc(jscode.name, '-dynamic-pure') : 'dynamic.js',
+      desc: `内层虚拟机代码（纯净）：`,
+      text: '// 该行标记来源，非动态代码生成: ' + JSON.stringify(ts) + '\n\n' + codePure,
+    },
     ...appcode,
     ...appcode.filter(it => it.decryptCode).map(it => ({
       name: filenameAddDesc(it.name, '-decrypt'),
@@ -58,12 +63,12 @@ function writeFile(step, ts, immucfg, { jscode, html, appcode = [] }, $_ts, code
 function firstStep(ts, immucfg, mate, outputResolve) {
   gv._setAttr('_ts', ts);
   const coder = new Coder(ts, immucfg);
-  const { code, $_ts, codemap } = coder.run({
+  const { code, $_ts, codemap, codePure } = coder.run({
     hasCodemap: true,
     hasDebug: !!gv.config.adapt?.hasDebug,
   });
   gv.config.codemap = codemap;
-  const files = writeFile('first', ts, immucfg, mate, $_ts, code, outputResolve);
+  const files = writeFile('first', ts, immucfg, mate, $_ts, code, codePure, outputResolve);
   const cookieVal = new Cookie(coder).run();
   const cookieKey = gv.utils.ascii2string(gv.keys[7]).split(';')[5] + (gv.config.adapt?.lastWord || 'T');
   return [files, `${cookieKey}=${cookieVal}`];
@@ -72,11 +77,11 @@ function firstStep(ts, immucfg, mate, outputResolve) {
 function secondStep(ts, immucfg, mate, outputResolve) {
   gv._setAttr('_ts', ts);
   const coder = new Coder(ts, immucfg);
-  const { code, $_ts } = coder.run();
+  const { code, $_ts, codePure } = coder.run();
   mate.appcode.forEach((appcode, idx) => {
     appcode.decryptCode = new AppCode(AppCode.getParams(appcode.code), idx + 1).run();
   });
-  return writeFile('second', ts, immucfg, mate, $_ts, code, outputResolve);
+  return writeFile('second', ts, immucfg, mate, $_ts, code, codePure, outputResolve);
 }
 
 module.exports = async function (ts, outputResolve) {

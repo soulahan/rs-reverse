@@ -13,7 +13,7 @@ function filenameAddDesc(name, desc) {
   return arr.join('.');
 }
 
-function writeFile(ts, immucfg, { jscode, html, appcode = [] }, $_ts, code, outputResolve) {
+function writeFile(ts, immucfg, { jscode, html, appcode = [] }, $_ts, code, codePure, outputResolve) {
   const files = [
     {
       name: 'ts.json',
@@ -36,6 +36,11 @@ function writeFile(ts, immucfg, { jscode, html, appcode = [] }, $_ts, code, outp
       name: jscode ? filenameAddDesc(jscode.name, '-dynamic') : 'dynamic.js',
       desc: `内层虚拟机代码：`,
       text: '// 该行标记来源，非动态代码生成: ' + JSON.stringify(ts) + '\n\n' + code,
+    },
+    codePure && {
+      name: jscode ? filenameAddDesc(jscode.name, '-dynamic-pure') : 'dynamic.js',
+      desc: `内层虚拟机代码（纯净）：`,
+      text: '// 该行标记来源，非动态代码生成: ' + JSON.stringify(ts) + '\n\n' + codePure,
     },
     ...appcode.reduce((ans, it) => {
       ans.push(it);
@@ -61,11 +66,11 @@ module.exports = function (ts, outputResolve) {
     fse.moveSync(outputResolve('makecode'), outputResolve('makecode-old'), { overwrite: true });
   }
   const coder = new Coder(ts, gv.config.immucfg);
-  const { code, $_ts } = coder.run();
+  const { code, $_ts, codePure } = coder.run();
   mate.appcode?.forEach((appcode, idx) => {
     appcode.decryptCode = new AppCode(AppCode.getParams(appcode.code), idx + 1).run();
   });
-  const files = writeFile(ts, coder.immucfg, mate, $_ts, code, outputResolve);
+  const files = writeFile(ts, coder.immucfg, mate, $_ts, code, codePure, outputResolve);
   console.log([
     `\n代码还原成功！用时：${new Date().getTime() - startTime}ms\n`,
     ...files.reduce((ans, it, idx) => ([...ans, typeof it === 'string' ? it : `${it.desc}${paths.relative(it.filepath)}${idx === files.length - 1 || it.newLine ? '\n' : ''}`]), []),
