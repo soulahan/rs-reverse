@@ -14,7 +14,7 @@ const path = require('path');
 
 function addRequestHead(uri) {
   return {
-    // proxy: 'http://127.0.0.1:8888',
+    proxy: process.env.proxy,
     gzip: true,
     uri,
     resolveWithFullResponse: true,
