@@ -1,5 +1,13 @@
 
 
+## [1.16.3](https://github.com/pysunday/rs-reverse/compare/1.16.1...1.16.3) (2026-02-17)
+
+
+### Bug Fixes
+
+* 代理外置，通过环境变量proxy设置 ([907dbcf](https://github.com/pysunday/rs-reverse/commit/907dbcfe1f73c2cd3c59c9a459a06102928013a9))
+* 如网站使用额外debugger版本，但是实际未使用，rs-reverse无法自动判断，因此增加--has-debug=false参数关闭功能，close [#24](https://github.com/pysunday/rs-reverse/issues/24) ([f2e71b8](https://github.com/pysunday/rs-reverse/commit/f2e71b8a0f104240b2b3bde10bbcc7b5fda9cf4c))
+
 ## [1.16.1](https://github.com/pysunday/rs-reverse/compare/1.16.0...1.16.1) (2025-12-16)
 
 
