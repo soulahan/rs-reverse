@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const getHelpCode = (command) => {
+  console.log(`执行命令：${command}`);
   return [
     '```bash',
     `$ npx rs-reverse ${command}`,
@@ -30,7 +31,7 @@ const helpMap = {
   makecookieHelp: getHelpCode('makecookie -h'),
   makecookieExample: [
     getHelpCode('makecookie'),
-    getHelpCode('makecookie -u https://jf.ccb.com/exchangecenter/search/product.jhtml'),
+    getHelpCode('makecookie -u https://www.riversecurity.com/'),
     getHelpCode("makecookie -j ./example/codes/main.js -f ./example/codes/\\$_ts.json"),
   ].join('\n\n'),
 }

@@ -9,7 +9,9 @@
 1. 直接使用`example`目录下的样例文件，如：`node main.js makecookie`，既使用项目默认用例的外层虚拟机代码文件+ts文件。
 2. 使用-j和-f命令指定本地外层虚拟机代码文件+ts文件(可通过makecode -u自动获取)，如：`node main.js makecookie -j ./path/to/main.js -f ./path/to/ts.json`
 
-注意：如果目标网站带额外debugger，且basearr中没有做适配，请确认-f对应配置文件是否存在hasDebug配置项，如不存在可手动添加或者执行makecode命令自动生成。
+注意1：如果目标网站为存在额外debugger版本，且basearr中没有做适配，请确认-f对应配置文件是否存在hasDebug配置项，如不存在可手动添加或者执行makecode命令自动生成。
+
+注意2：如果目标网站为存在额外debugger版本，但是实际并未开启该功能，由于无法判断，因此报错后可使用--no-has-debug或--has-debug=false配置项手动关闭。
 
 ## 1. 博客文章
 
@@ -42,7 +44,8 @@ rs-reverse makecode
 
 Options:
   -h             显示帮助信息                                          [boolean]
-  -f, --file     含有nsd, cd值的json文件                                [string]
+  -f, --file     含有nsd, cd值的json文件,
+                 额外配置项：from（来源）、hasDebug（额外debugger）     [string]
   -j, --jsurls   瑞数加密的js文件链接或者本地js文件路径                  [array]
   -u, --url      瑞数返回204状态码的请求地址                            [string]
   -o, --output   输出文件目录                     [string] [default: "./output"]
@@ -62,7 +65,7 @@ Examples:
 
 ```bash
 $ npx rs-reverse makecode
-代码还原成功！用时：21ms
+代码还原成功！用时：22ms
 
   原始$_ts：output/makecode/ts.json
   外层虚拟机生成的$_ts：output/makecode/ts-full.json
@@ -84,7 +87,7 @@ $ npx rs-reverse makecode -u https://www.riversecurity.com/
 
 ```bash
 $ npx rs-reverse makecode -j ./example/codes/main.js -f ./example/codes/\$_ts.json
-代码还原成功！用时：20ms
+代码还原成功！用时：22ms
 
   原始$_ts：output/makecode/ts.json
   外层虚拟机生成的$_ts：output/makecode/ts-full.json
@@ -109,14 +112,17 @@ rs-reverse makecookie
 生成cookie字符串，包含后台返回+程序生成，可直接复制使用
 
 Options:
-  -h             显示帮助信息                                          [boolean]
-  -f, --file     含有nsd, cd值的json文件                                [string]
-  -j, --jsurls   瑞数加密的js文件链接或者本地js文件路径                  [array]
-  -u, --url      瑞数返回204状态码的请求地址                            [string]
-  -o, --output   输出文件目录                     [string] [default: "./output"]
-  -l, --level    日志打印等级，参考log4js，默认为warn                   [string]
-  -c, --config   配置对象，传入对象或者json文件路径                     [string]
-  -v, --version  显示版本号                                            [boolean]
+  -h               显示帮助信息                                        [boolean]
+  -f, --file       含有nsd, cd值的json文件,
+                   额外配置项：from（来源）、hasDebug（额外debugger）   [string]
+  -j, --jsurls     瑞数加密的js文件链接或者本地js文件路径                [array]
+  -u, --url        瑞数返回204状态码的请求地址                          [string]
+  -o, --output     输出文件目录                   [string] [default: "./output"]
+  -l, --level      日志打印等级，参考log4js，默认为warn                 [string]
+  -c, --config     配置对象，传入对象或者json文件路径                   [string]
+      --has-debug  如网站是额外debugger版本，但是未真正使用，可使用--has-debug=f
+                   alse或--no-has-debug关闭                            [boolean]
+  -v, --version    显示版本号                                          [boolean]
 
 Examples:
   main.js makecookie
@@ -131,23 +137,23 @@ Examples:
 
 ```bash
 $ npx rs-reverse makecookie
-成功生成cookie（长度：257），用时：496ms
-cookie值: NOh8RTWx6K2dT=0aVFQWz9TfBZEx_EGQe8fpVBBOkDIQGjOpbzYQIWlwicb3GLeojY7FT_iq0fqpSVIt._yUpsnu2h9jX1copSnJWwcqwMW7awhErC.OWPMB6H1j.0hGxOLsPpvf7rrhaSNTowR.IKzW8ZldpXsThD69So3MEQ7_qbc99iyczvsp5l4_gOxdq1s43qOdp7OOHxj86WrZjCDljtGJexbDZc2ug_yAH_PHZSIX4XSFwoLd0MB4MMAVjA1.BhA4OXk2cM2
+成功生成cookie（长度：257），用时：456ms
+cookie值: NOh8RTWx6K2dT=0_V5qiWgmVpYed7n0xt0sh.qObwemlYfrevBXDxzYHeQqxa2kKv7JibnYvC2hp9cIyZUkogzr_7SHRptTqZQ8nvhvmsmS96BQE2P9FdVPC33JkJrvG0bLZM6QTffPrAej_w3vj3GYGFsHj3eSNAtz3IDboDjZMPUxYtWgtduwLrqSEVfE.uYgl5OpVtfp7DEVrouVExqfoAbFnpkfJjXJ4mcwHyZujiXcVrDA6rM9mjCsb_s_e.nvxZiPf1eITc1D
 ```
 
 ```bash
-$ npx rs-reverse makecookie -u https://jf.ccb.com/exchangecenter/search/product.jhtml
-存在meta-content值：iUSEadR917H0IwDh4a4WcTejHWXFPmaoOoVNOFwRSiiy6gPRGwPtMp0BmDB_tzg2jXkJpxv96xBH8HtpR.VHg7KNH1Yl1uu98Je4S5F2qx.rvDHtMloL0ODjlHlWKYRckcjD6DCKZZlCSo.3bN_17kWofwb6O7E6TitmHvRDDVlfG8s84V6E9U5ee6rqRKcA
-解析结果：/exchangecenter/search/product.jhtml
+$ npx rs-reverse makecookie -u https://www.riversecurity.com/
+存在meta-content值：wzJz1uYec7CI5jjpz9Lak3E964C23aPH8tm9ImbiS.eX0hC5E1Wldc6_I_acluob
+解析结果：https://www.riversecurity.com/
 
-成功生成cookie（长度：257），用时：498ms
-cookie值: u38hCs0hyeaNT=0CXtVHsUPIkbtEcMxPgyGFrfBVdiqEWlgRXOpT4mpT4XV2Ai6tBbuqVxsFuaYTFanjpoXmq4KPDDFYhMd0FXh_mg5sZbeAvqVVeWYBClfGnDDN3LeiDrNj4QPcEqV657iJyo.TkgoQe.KnOyVO1DTJm9vUQXiRfVfQeXOgEf6kZ8vQ80Qm8FFyh3mrzxQR_RVzHHGxKXL80BcCwLMk5j6ykggqdlHenHCXNhMP39pSc4Qq6z.M6fnjAg6KdcjhYoh;tgw_l7_route=af7e78e331df87effb5218d9d47da852;u38hCs0hyeaNS=60wuK2WB3cWMZ03TG3a4jWTMBbCLU3ag2yOBHOKE9qGEbHZewERNaCuthacV8CU9Aa_exeK1SF.SWa86KVtpCUFq;ha_safe=safe4
+成功生成cookie（长度：236），用时：464ms
+cookie值: gshewq7j5KkrT=0_w_p.2MoSNVgsA0i1dqj1GBrSPJNJa_zXxBTFg0fTroT86Vu8f2JnT.RrjwaHop96SuNZX7wjqneFWm4Roc4xfLcHVtn9LgeUF6EBG0rtXljOPJkt2Ta96drYf__E7pLNQ4TdC.JVIwecImpyvGcVUz1d4DQyut2tmOdURCI1v0HwI7c6FVM0HEDPZptfOBYC6dg9w4Qrjxm1q.x0_lHrouirj3U.nb_JoCfqE7dsha;gshewq7j5KkrO=60jCcRUIfPmOmKX_m56jocvOA42Izkd5V5w._3wd7GHycIQg8RptPMjaMKZtE7SSMmyKgG0ULySpC2Dc7GYynzdA
 ```
 
 ```bash
 $ npx rs-reverse makecookie -j ./example/codes/main.js -f ./example/codes/\$_ts.json
-成功生成cookie（长度：257），用时：495ms
-cookie值: NOh8RTWx6K2dT=0N1DdbobY1CJfR4T4Sbm4BoZWVVllqPQCy.SZOcRkg5YjfxXjYWeZNgIgul5vNJWVwubBSYiCDlxx8JIiaI2hhjEGBcHmYC21aSc_5B2nYouHb2Y7AXGkdlWO2N_rCq6p3fYsBPLino7fgSrKCWUlmw.GTH0OPM9kHnAXMEe.RN3Y75vh9FKAWFfcZq82ZABuNUhjweKmZj19reEvet3wG2tl.rRlkg4zsGajxWJwTHAsenU6uYynnv6N.Kp8p5gH
+成功生成cookie（长度：257），用时：464ms
+cookie值: NOh8RTWx6K2dT=02_0u8OKt0AiMF7SS9i2986rQ3AnPTlIxpPhIMNCwcwiu2cgZzxzYYqjzG.CPF7XiGj3fabsWYtVSr4jdvDAmRboRcsDMZvtptPCPh5E1mT5WurboBn_q7kQ0vtHw0D9b5H87ZuZfrGzPAfx8SvRK90UhnZoHcHYAw54pp1F6aPZEFkdgH817oR8MYau_enDxXFDuouHqpe8DE31e7QKY7c6VW07i2Fx3d3Zhm5VyrlBADxgarS3DmvXAHXbKq3A2
 ```
 
 ### 2.3. makecode-high子命令
@@ -170,12 +176,14 @@ rs-reverse makecode-high
 接收网站地址，生成两次请求对应的全量ts文本、静态文本、内外层虚拟机代码等文件
 
 Options:
-  -h             显示帮助信息                                          [boolean]
+  -h               显示帮助信息                                        [boolean]
   -m
-  -u, --url      瑞数返回204状态码的请求地址                 [string] [required]
-  -o, --output   输出文件目录                     [string] [default: "./output"]
-  -l, --level    日志打印等级，参考log4js，默认为warn                   [string]
-  -v, --version  显示版本号                                            [boolean]
+  -u, --url        瑞数返回204状态码的请求地址               [string] [required]
+  -o, --output     输出文件目录                   [string] [default: "./output"]
+  -l, --level      日志打印等级，参考log4js，默认为warn                 [string]
+      --has-debug  如网站是额外debugger版本，但是未真正使用，可使用--has-debug=f
+                   alse或--no-has-debug关闭                            [boolean]
+  -v, --version    显示版本号                                          [boolean]
 
 Examples:
   main.js makecode-high -u https://url/index.html
@@ -185,7 +193,7 @@ Examples:
 
 ```bash
 $ npx rs-reverse makecode-high -u https://zhaopin.sgcc.com.cn/sgcchr/static/home.html
-代码还原成功！用时：871ms
+代码还原成功！用时：911ms
 
   
 第1次请求保存文件：
@@ -222,7 +230,8 @@ rs-reverse exec
 
 Options:
   -h                  显示帮助信息                                     [boolean]
-  -f, --file, --file  含有nsd, cd值的json文件                           [string]
+  -f, --file, --file  含有nsd, cd值的json文件,
+                      额外配置项：from（来源）、hasDebug（额外debugger）[string]
   -j, --jsurls        瑞数加密的js文件链接或者本地js文件路径             [array]
   -l, --level         日志打印等级，参考log4js，默认为warn              [string]
   -c, --code          要运行的代码，如：gv.cp2，即打印cp2的值[string] [required]
