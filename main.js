@@ -31,6 +31,10 @@ function debugLog(level) {
 }
 
 const commandBuilder = {
+  'has-debug': {
+    type: 'boolean',
+    describe: '如网站是额外debugger版本，但是未真正使用，可使用--has-debug=false或--no-has-debug关闭',
+  },
   f: {
     alias: 'file',
     describe: '含有nsd, cd值的json文件, 额外配置项：from（来源）、hasDebug（额外debugger）',
@@ -116,6 +120,7 @@ const commandHandler = gv.wrap(async (command, { argv, config }) => {
     const tspath = paths.exampleResolve('codes', '$_ts.json')
     return JSON5.parse(fs.readFileSync(tspath, 'utf8'))
   })();
+  if (typeof argv.hasDebug === 'boolean') ts.hasDebug = argv.hasDebug;
   if (!argv.mate.url && argv._[0] === 'makecookie' && argv.mate.jscode) await notUrlHanlde(config, ts);
   logger.trace(`$_ts.nsd: ${ts.nsd}`);
   logger.trace(`$_ts.cd: ${ts.cd}`);
@@ -123,6 +128,7 @@ const commandHandler = gv.wrap(async (command, { argv, config }) => {
     command(ts, outputResolve);
   } catch (err) {
     logger.error(err.stack);
+    if (ts.hasDebug) logger.warn('当前为额外debugger版本，由于存在使用该版本但是未开启额外debugger功能，如遇到报错请使用--no-has-debug或--has-debug=false后重新尝试！');
   }
 });
 
@@ -159,6 +165,7 @@ module.exports = yargs
         .option('u', { ...commandBuilder.u, demandOption: true })
         .option('o', commandBuilder.o)
         .option('l', commandBuilder.l)
+        .option('has-debug', commandBuilder['has-debug'])
         .example('$0 makecode-high -u https://url/index.html');
     },
     commandHandler.bind(null, makeCodeHigh),
@@ -174,6 +181,7 @@ module.exports = yargs
         .option('o', commandBuilder.o)
         .option('l', commandBuilder.l)
         .option('c', commandBuilder.c)
+        .option('has-debug', commandBuilder['has-debug'])
         .example('$0 makecookie')
         .example('$0 makecookie -f /path/to/ts.json')
         .example('$0 makecookie -u https://url/index.html')
